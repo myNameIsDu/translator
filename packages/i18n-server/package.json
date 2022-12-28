@@ -1,0 +1,68 @@
+{
+  "name": "i18n-server",
+  "bin": {
+    "i18n": "./dist/i18n.js"
+  },
+  "files": [
+    "server.js",
+    "public/**/*",
+    "build/**/*",
+    "dist/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "build": "npm run build:css && remix build",
+    "dev:css": "tailwindcss -w -i ./app/styles/app.css -o app/styles/root.css",
+    "build:css": "tailwindcss -m -i ./app/styles/app.css -o app/styles/root.css",
+    "dev": "remix build && run-p \"dev:*\"",
+    "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config ./server.js --watch ./server.js",
+    "dev:remix": "remix watch",
+    "cli": "tsc --project ./tsconfig-cli.json -w",
+    "dev-cli": "concurrently \"remix build\" \"pnpm run dev:remix\" \"pnpm run cli\" \"pnpm run dev:css\"",
+    "start": "cross-env NODE_ENV=production node ./server.js",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@remix-run/express": "^1.8.2",
+    "@remix-run/node": "^1.8.2",
+    "@remix-run/react": "^1.8.2",
+    "@rsuite/icons": "^1.0.2",
+    "@types/glob": "^8.0.0",
+    "autoprefixer": "^10.4.13",
+    "clipanion": "3.2.0-rc.14",
+    "compression": "^1.7.4",
+    "concurrently": "^7.6.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.2",
+    "glob": "^8.0.3",
+    "isbot": "^3.6.5",
+    "lodash": "^4.17.21",
+    "match-sorter": "^6.3.1",
+    "morgan": "^1.10.0",
+    "node-xlsx": "^0.21.0",
+    "postcss": "^8.4.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rsuite": "^5.23.2",
+    "tailwindcss": "^3.2.4"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.8.2",
+    "@remix-run/eslint-config": "^1.8.2",
+    "@types/lodash": "^4.14.191",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.8",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.27.0",
+    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.8.4"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

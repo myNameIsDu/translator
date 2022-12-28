@@ -1,0 +1,9 @@
+node_modules
+
+/.cache
+/build
+/public/build
+.env
+/dist
+/app/styles/root.css
+/app/upload/*
