@@ -98,7 +98,7 @@ declare const setLang: (lang: SupportLanguagesType) => void;
 
 ## 强绑定的文案和`t`
 
-为了能收集到所有的文案，所有牺牲了写法的灵活性，强行绑定文案和 `t`
+为了能收集到所有的文案，所以牺牲了写法的灵活性，强行绑定文案和 `t`
 
 例如：
 
