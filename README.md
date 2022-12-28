@@ -18,7 +18,7 @@ pnpm install i18n-server -D
 
 ## Get Start
 
-1. 导入 `Provider` 从 `src/locales/complete.json` 导入 语言包，并传入 `Provider`
+1. 导入 `Provider`，从 `src/locales/complete.json` 导入 语言包，并传入 `Provider`
 
 ```tsx
 import locales from './locales/complete.json';
@@ -42,7 +42,7 @@ function Page (){
 }
 ```
 
-在 `react`组件外的文案 (常量的声明里) 需要使用用 `Translate`
+在 `react`组件外的文案 (常量的声明里) 需要使用 `Translate`
 
 ```tsx
 import { Translate } from 'i18n-client';
