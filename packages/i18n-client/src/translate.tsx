@@ -1,7 +1,7 @@
 import { holderFinder, matchHolderRegex } from "../../common/utils";
 import { getLang, getLocales } from "./info";
 
-interface TranslatePropsType {
+export interface TranslatePropsType {
   text: string;
   key?: string;
 }
@@ -30,7 +30,7 @@ export function Translate({ text, key }: TranslatePropsType): JSX.Element {
   return resultText as unknown as JSX.Element;
 }
 
-interface TSecondParamsType {
+export interface TSecondParamsType {
   key?: string;
 }
 export function t(s: string, { key }: TSecondParamsType = {}): string {

@@ -1,0 +1,7 @@
+
+
+# production
+/es
+/lib
+/types
+index.d.ts

@@ -6,9 +6,9 @@ import { SupportLanguagesType, supportLanguages } from "../../common/config";
   比如在使用一些库时会出现问题：Yup，但是这样做的弊端在于只能使用 location.reload 刷新页面
 */
 
-let locales: LocalesType = {};
+export let locales: LocalesType = {};
 
-let lang = (() => {
+export let lang = (() => {
   const lang = (localStorage.getItem("lang") ||
     navigator.language) as SupportLanguagesType;
   return supportLanguages.includes(lang) ? lang : supportLanguages[0];

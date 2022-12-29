@@ -14,14 +14,14 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "npm run build:css && remix build",
     "dev:css": "tailwindcss -w -i ./app/styles/app.css -o app/styles/root.css",
     "build:css": "tailwindcss -m -i ./app/styles/app.css -o app/styles/root.css",
     "dev": "remix build && run-p \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config ./server.js --watch ./server.js",
     "dev:remix": "remix watch",
     "cli": "tsc --project ./tsconfig-cli.json -w",
-    "dev-cli": "concurrently \"remix build\" \"pnpm run dev:remix\" \"pnpm run cli\" \"pnpm run dev:css\"",
+    "dev-cli": "concurrently \"remix build\" \"remix build\" \"pnpm run dev:remix\" \"pnpm run cli\" \"pnpm run dev:css\"",
+    "build":"concurrently \"npm run build:css\" \"tsc --project ./tsconfig-cli.json\" ",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "typecheck": "tsc -b"
   },

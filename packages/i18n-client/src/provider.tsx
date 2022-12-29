@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { type LocalesType } from "../../common/config";
 import { setLocales } from "./info";
 
-interface I18nextProviderPropsType {
+export interface I18nextProviderPropsType {
   locales: LocalesType;
   children: ReactElement;
 }

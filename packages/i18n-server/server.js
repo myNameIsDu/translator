@@ -34,19 +34,19 @@ app.all(
   "*",
   // process.env.NODE_ENV === "development"
   //   ?
-  (req, res, next) => {
-    purgeRequireCache();
+  // (req, res, next) => {
+  //   purgeRequireCache();
 
-    return createRequestHandler({
-      build: require(BUILD_DIR),
-      mode: process.env.NODE_ENV,
-    })(req, res, next);
-  }
+  //   return createRequestHandler({
+  //     build: require(BUILD_DIR),
+  //     mode: process.env.NODE_ENV,
+  //   })(req, res, next);
+  // }
   // :
-  // createRequestHandler({
-  //   build: require(BUILD_DIR),
-  //   mode: process.env.NODE_ENV,
-  // })
+  createRequestHandler({
+    build: require(BUILD_DIR),
+    mode: process.env.NODE_ENV,
+  })
 );
 const port = process.env.PORT || 7733;
 
