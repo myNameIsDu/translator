@@ -1,6 +1,6 @@
 {
   "name": "translator-client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "publishConfig": {
     "access": "public"

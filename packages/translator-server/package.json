@@ -1,6 +1,6 @@
 {
   "name": "translator-server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "bin": {
     "translator": "./dist/translator.js"
   },
@@ -25,7 +25,7 @@
     "dev:remix": "remix watch",
     "cli": "tsc --project ./tsconfig-cli.json -w",
     "dev-cli": "concurrently \"remix build\" \"remix build\" \"pnpm run dev:remix\" \"pnpm run cli\" \"pnpm run dev:css\"",
-    "build":"concurrently \"npm run build:css\" \"tsc --project ./tsconfig-cli.json\" ",
+    "build": "concurrently \"npm run build:css\" \"tsc --project ./tsconfig-cli.json\" ",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "typecheck": "tsc -b"
   },
