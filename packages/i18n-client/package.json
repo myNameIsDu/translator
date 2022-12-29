@@ -2,6 +2,9 @@
   "name": "i18n-client",
   "version": "0.0.0",
   "description": "",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "i18n",
     "react"
