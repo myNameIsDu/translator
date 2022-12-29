@@ -2,12 +2,15 @@ import { ReactElement } from "react";
 import { type LocalesType } from "../../common/config";
 import { setLocales } from "./info";
 
-export interface I18nextProviderPropsType {
+export interface TranslatorProviderPropsType {
   locales: LocalesType;
   children: ReactElement;
 }
 
-export function I18nProvider({ children, locales }: I18nextProviderPropsType) {
+export function TranslatorProvider({
+  children,
+  locales,
+}: TranslatorProviderPropsType) {
   setLocales(locales);
   return children;
 }

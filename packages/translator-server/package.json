@@ -1,7 +1,7 @@
 {
-  "name": "i18n-server",
+  "name": "translator-server",
   "bin": {
-    "i18n": "./dist/i18n.js"
+    "translator": "./dist/translator.js"
   },
   "files": [
     "server.js",

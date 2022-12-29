@@ -1,5 +1,5 @@
 {
-  "name": "i18n-client",
+  "name": "translator-client",
   "version": "0.0.1",
   "description": "",
   "publishConfig": {
@@ -7,7 +7,8 @@
   },
   "keywords": [
     "i18n",
-    "react"
+    "react",
+    "translator"
   ],
   "main": "./lib/index.js",
   "module": "./es/index.js",

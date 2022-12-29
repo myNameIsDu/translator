@@ -12,8 +12,8 @@
 ## Install
 
 ```shell
-pnpm install i18n-client
-pnpm install i18n-server -D
+pnpm install translator-client
+pnpm install translator-server -D
 ```
 
 ## Get Start
@@ -22,10 +22,10 @@ pnpm install i18n-server -D
 
 ```tsx
 import locales from './locales/complete.json';
-import { I18nProvider } from 'i18n-client';
+import { TranslatorProvider } from 'translator-client';
 
-<I18nProvider locales={locales}>
-</I18nProvider>
+<TranslatorProvider locales={locales}>
+</TranslatorProvider>
 
 ```
 
@@ -36,7 +36,7 @@ import { I18nProvider } from 'i18n-client';
 在需要翻译的文案外包一层 `t`,
 
 ```tsx
-import { t } from 'i18n-client';
+import { t } from 'translator-client';
 function Page (){
     return t('文案')
 }
@@ -45,7 +45,7 @@ function Page (){
 在 `react`组件外的文案 (常量的声明里) 需要使用 `Translate`
 
 ```tsx
-import { Translate } from 'i18n-client';
+import { Translate } from 'translator-client';
 export const data = [
   {
     label: <Translate text="文案1" />,
@@ -58,7 +58,7 @@ export const data = [
 ];
 ```
 
-3. 执行 `pnpm i18n`，打开 `http://localhost:7733/` 可以查看到收集的文案，并操作
+3. 执行 `pnpm translator`，打开 `http://localhost:7733/` 可以查看到收集的文案，并操作
 
 ## API
 

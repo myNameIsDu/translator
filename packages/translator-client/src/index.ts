@@ -1,4 +1,7 @@
-export { I18nProvider, type I18nextProviderPropsType } from "./provider";
+export {
+  TranslatorProvider,
+  type TranslatorProviderPropsType,
+} from "./provider";
 export {
   t,
   Translate,
