@@ -29,13 +29,15 @@ export const action: ActionFunction = async ({ request }) => {
   const translatedData = xlsx
     .parse(await file.arrayBuffer())[0]
     .data.slice(2) as [string, string, string][];
-  const translatedObj = translatedData.reduce<LocalesType>((a, b) => {
-    a[b[0]] = {
-      "zh-CN": b[1],
-      "en-US": b[2],
-    };
-    return a;
-  }, {});
+  const translatedObj = translatedData
+    .filter((v) => v[0] && v[1] && v[2])
+    .reduce<LocalesType>((a, b) => {
+      a[b[0]] = {
+        zh: b[1],
+        en: b[2],
+      };
+      return a;
+    }, {});
   const completeData = readObjectComplete();
   const resultData = { ...completeData, ...translatedObj };
   fs.writeFileSync(completeJsonPath, JSON.stringify(resultData, null, 2));

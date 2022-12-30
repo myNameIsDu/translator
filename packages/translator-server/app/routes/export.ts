@@ -12,7 +12,7 @@ export const loader: LoaderFunction = () => {
       "英文",
     ],
   ];
-  const resetData = data.map((v) => [v.key, v["zh-CN"]]);
+  const resetData = data.map((v) => [v.key, v["zh"]]);
   const buffer = xlsx.build([
     {
       name: "未翻译词条",

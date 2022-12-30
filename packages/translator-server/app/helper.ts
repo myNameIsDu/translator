@@ -5,7 +5,7 @@ import fs from "fs";
 import glob from "../glob.server";
 
 export const matchTranslateRegex =
-  /<Translate( |\n|\t)*((text=(?<q1>["'])(?<text1>.*?)\k<q1>)|(key=(?<q2>["'])(?<key1>.*?)\k<q2>))?( |\n|\t)*((text=(?<q3>["'])(?<text2>.*?)\k<q3>)|(key=(?<q4>["'])(?<key2>.*?)\k<q4>))?( |\n|\t)*?\/>/g;
+  /<Translate( |\n|\t)*((text=((?<q1>["'])|({`))(?<text1>.*?)((\k<q1>)|(`})))|(key=(?<q2>["'])(?<key1>.*?)\k<q2>))?( |\n|\t)*((text=((?<q3>["'])|({`))(?<text2>.*?)((\k<q3>)|(`})))|(key=(?<q4>["'])(?<key2>.*?)\k<q4>))?( |\n|\t)*?\/>/g;
 
 export const matchTRegex =
   /\bt\((?<q1>["`'])(?<text>.*?)\k<q1>(,( |\n|\t)*\{( |\n|\t)*key( |\n|\t)*:( |\n|\t)*(?<q2>["'])(?<key>.*?)\k<q2>( |\n|\t)*\})?\)/g;

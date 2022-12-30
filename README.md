@@ -91,7 +91,7 @@ declare function Translate({ text, key }: TranslatePropsType): JSX.Element;
 切换语言的方法，切换后会自动 reload 页面
 
 ```tsx
-type SupportLanguagesType = "zh-CN" | "en-US"
+type SupportLanguagesType = "zh" | "en"
 
 declare const setLang: (lang: SupportLanguagesType) => void;
 ```

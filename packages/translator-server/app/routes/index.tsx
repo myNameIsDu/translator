@@ -44,8 +44,8 @@ export type FilterType = typeof filterData[number]["value"];
 
 type DataType = {
   key: string;
-  "zh-CN": string;
-  "en-US"?: string;
+  zh: string;
+  en?: string;
 };
 
 export const loader: LoaderFunction = ({ request }) => {
@@ -70,9 +70,7 @@ export const loader: LoaderFunction = ({ request }) => {
     }));
   }
   if (queryWord) {
-    return json(
-      matchSorter(data, queryWord, { keys: ["zh-CN", "key", "en-US"] })
-    );
+    return json(matchSorter(data, queryWord, { keys: ["zh", "key", "en"] }));
   }
   return json(data);
 };
@@ -213,13 +211,13 @@ export default function Index() {
               {(rowData) =>
                 rowData.key === editKey ? (
                   <Form.Control
-                    name="zh-CN"
+                    name="zh"
                     disabled
                     className="relative left-0 top-[-8px]"
-                    defaultValue={rowData["zh-CN"]}
+                    defaultValue={rowData["zh"]}
                   />
                 ) : (
-                  rowData["zh-CN"]
+                  rowData["zh"]
                 )
               }
             </Cell>
@@ -231,13 +229,13 @@ export default function Index() {
                 rowData.key === editKey ? (
                   <Form.Control
                     rule={Schema.Types.StringType().isRequired("请输入")}
-                    name="en-US"
+                    name="en"
                     className="relative left-0 top-[-8px]"
                     errorPlacement="rightStart"
-                    defaultValue={rowData["en-US"]}
+                    defaultValue={rowData["en"]}
                   />
                 ) : (
-                  rowData["en-US"]
+                  rowData["en"]
                 )
               }
             </Cell>

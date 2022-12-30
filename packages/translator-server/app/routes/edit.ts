@@ -6,15 +6,15 @@ import fs from "fs";
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const key = formData.get("key") as string;
-  const zh = formData.get("zh-CN");
-  const en = formData.get("en-US");
+  const zh = formData.get("zh");
+  const en = formData.get("en");
   const original = readObjectComplete();
   fs.writeFileSync(
     completeJsonPath,
     JSON.stringify(
       {
         ...original,
-        [key]: { "zh-CN": zh, "en-US": en },
+        [key]: { zh: zh, en: en },
       },
       null,
       2

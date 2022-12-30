@@ -15,6 +15,12 @@ describe("正则匹配文件中的 文案 和 key", () => {
     ["<Translate text='我是文案' />", "我是文案", undefined],
     ["<Translate text='我是文案' key='我是 key'/>", "我是文案", "我是 key"],
     ["<Translate key='我是 key' text='我是文案' />", "我是文案", "我是 key"],
+
+    [
+      "<Translate key='我是 key' text={`我#$%var#$%案`} />",
+      "我#$%var#$%案",
+      "我是 key",
+    ],
   ])("匹配 %s 中的 %s 和 %s", (content, text, key) => {
     const matchResult = matchTranslateRegex.exec(content);
     const groups = matchResult?.groups || {};
