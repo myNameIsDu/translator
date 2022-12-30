@@ -1,5 +1,11 @@
 # translator-server
 
+## 0.0.3
+
+### Patch Changes
+
+- ca5c1e1: zh-CH en-US => zh en,Translate 组件支持动态文案
+
 ## 0.0.2
 
 ### Patch Changes
