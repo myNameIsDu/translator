@@ -17,7 +17,7 @@ import debounce from "lodash/debounce";
 import { matchSorter } from "match-sorter";
 import {
   readArrayComplete,
-  getAllTextAndKey,
+  getAllTextAndId,
   readObjectComplete,
   getUnTranslate,
 } from "../helper";
@@ -43,7 +43,7 @@ const filterData = [
 export type FilterType = typeof filterData[number]["value"];
 
 type DataType = {
-  key: string;
+  id: string;
   zh: string;
   en?: string;
 };
@@ -59,18 +59,18 @@ export const loader: LoaderFunction = ({ request }) => {
   } else if (queryType === "unTranslate") {
     data = getUnTranslate();
   } else if (queryType === "dead") {
-    const { allKeys } = getAllTextAndKey();
+    const { allIds } = getAllTextAndId();
     const originalCompleteData = readObjectComplete();
     let deadKeys: string[] = Object.keys(originalCompleteData).filter(
-      (k) => !allKeys.includes(k)
+      (k) => !allIds.includes(k)
     );
     data = deadKeys.map((key) => ({
-      key,
+      id: key,
       ...originalCompleteData[key],
     }));
   }
   if (queryWord) {
-    return json(matchSorter(data, queryWord, { keys: ["zh", "key", "en"] }));
+    return json(matchSorter(data, queryWord, { keys: ["zh", "id", "en"] }));
   }
   return json(data);
 };
@@ -83,7 +83,7 @@ export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
   const type = (searchParams.get("type") || "complete") as FilterType;
   const [searchWord, setSearchWord] = useState(searchParams.get("word") || "");
-  const [editKey, setEditKey] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   const formRef = useRef<FormInstance>();
   const [formValue, setFormValue] = useState({});
 
@@ -115,8 +115,8 @@ export default function Index() {
     a.click();
   };
 
-  const handleDelete = (key: string) => {
-    deleteMutation.submit({ key }, { method: "delete", action: "/delete" });
+  const handleDelete = (id: string) => {
+    deleteMutation.submit({ id }, { method: "delete", action: "/delete" });
   };
 
   const handleImport = () => {
@@ -135,13 +135,13 @@ export default function Index() {
   };
 
   const handleEdit = (rowData: DataType) => {
-    const { key } = rowData;
-    setEditKey(key);
+    const { id } = rowData;
+    setEditId(id);
     setFormValue(rowData);
   };
 
   const handleCancel = () => {
-    setEditKey(null);
+    setEditId(null);
     formRef.current?.cleanErrors();
     setFormValue({});
   };
@@ -189,18 +189,18 @@ export default function Index() {
         </div>
         <Table height={800} virtualized data={loaderData}>
           <Colum align="left" flexGrow={1} width={450}>
-            <HeaderCell>key(当前词条的唯一标识，默认为中文key)</HeaderCell>
+            <HeaderCell>id(当前词条的唯一标识，默认为中文)</HeaderCell>
             <Cell>
               {(rowData) =>
-                rowData.key === editKey ? (
+                rowData.id === editId ? (
                   <Form.Control
-                    name="key"
+                    name="id"
                     disabled
                     className="relative left-0 top-[-8px]"
-                    defaultValue={rowData["key"]}
+                    defaultValue={rowData["id"]}
                   />
                 ) : (
-                  rowData["key"]
+                  rowData["id"]
                 )
               }
             </Cell>
@@ -209,7 +209,7 @@ export default function Index() {
             <HeaderCell>中文</HeaderCell>
             <Cell>
               {(rowData) =>
-                rowData.key === editKey ? (
+                rowData.id === editId ? (
                   <Form.Control
                     name="zh"
                     disabled
@@ -226,7 +226,7 @@ export default function Index() {
             <HeaderCell>英文</HeaderCell>
             <Cell>
               {(rowData) =>
-                rowData.key === editKey ? (
+                rowData.id === editId ? (
                   <Form.Control
                     rule={Schema.Types.StringType().isRequired("请输入")}
                     name="en"
@@ -244,10 +244,10 @@ export default function Index() {
             <HeaderCell>操作</HeaderCell>
             <Cell style={{ padding: 6 }}>
               {(rowData) => {
-                const { key } = rowData;
+                const { id } = rowData;
                 return (
                   <div>
-                    {editKey === key ? (
+                    {editId === id ? (
                       <>
                         <Button appearance="link" type="submit">
                           save
@@ -258,16 +258,16 @@ export default function Index() {
                       </>
                     ) : (
                       <Button
-                        disabled={editKey !== null}
+                        disabled={editId !== null}
                         appearance="link"
                         onClick={() => handleEdit(rowData)}
                       >
                         edit
                       </Button>
                     )}
-                    {type !== "unTranslate" && !editKey && (
+                    {type !== "unTranslate" && !editId && (
                       <Button
-                        onClick={() => handleDelete(key)}
+                        onClick={() => handleDelete(id)}
                         appearance="link"
                       >
                         delete

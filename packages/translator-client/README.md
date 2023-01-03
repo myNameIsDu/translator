@@ -11,7 +11,7 @@ pnpm install translator-client
 react 上下文中的翻译方法
 
 ```tsx
-declare function t(s: string, { key }?: {key: string}): string;
+declare function t(s: string, { id }?: {id: string}): string;
 ```
 
 支持动态文案，例如
@@ -20,14 +20,14 @@ declare function t(s: string, { key }?: {key: string}): string;
 t(`共计#$%${var}#$%`)
 ```
 
-其中动态的部分会被替换为 `holder1` 并作为 `key` 使用
+其中动态的部分会被替换为 `holder1` 并作为 `id` 使用
 
 ### Translate
 
 react 上下文外 (常量声明) 的翻译组件
 
 ```tsx
-declare function Translate({ text, key }: TranslatePropsType): JSX.Element;
+declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 ```
 
 ### setLanguage

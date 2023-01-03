@@ -5,7 +5,7 @@ import fs from "fs";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const key = formData.get("key") as string;
+  const id = formData.get("id") as string;
   const zh = formData.get("zh");
   const en = formData.get("en");
   const original = readObjectComplete();
@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({ request }) => {
     JSON.stringify(
       {
         ...original,
-        [key]: { zh: zh, en: en },
+        [id]: { zh: zh, en: en },
       },
       null,
       2

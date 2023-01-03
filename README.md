@@ -3,8 +3,8 @@
 ## 特点
 
 - 使用简单
-- 默认中文 key，无需特意声明各种 key，中文就写在代码中，所见以所得
-- 支持一个中文多种英文翻译 (特定 key)
+- 默认中文 id，无需特意声明各种 id，中文就写在代码中，所见以所得
+- 支持一个中文多种英文翻译 (特定 id)
 - 支持动态文案
 - 自动收集，并找出过期的翻译(在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
 - 可视化操作
@@ -67,7 +67,7 @@ export const data = [
 react 上下文中的翻译方法
 
 ```tsx
-declare function t(s: string, { key }?: {key: string}): string;
+declare function t(s: string, { id }?: {id: string}): string;
 ```
 
 支持动态文案，例如
@@ -76,14 +76,14 @@ declare function t(s: string, { key }?: {key: string}): string;
 t(`共计#$%${var}#$%`)
 ```
 
-其中动态的部分会被替换为 `holder1` 并作为 `key` 使用
+其中动态的部分会被替换为 `holder1` 并作为 `id` 使用
 
 ### Translate
 
 react 上下文外 (常量声明) 的翻译组件
 
 ```tsx
-declare function Translate({ text, key }: TranslatePropsType): JSX.Element;
+declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 ```
 
 ### setLanguage

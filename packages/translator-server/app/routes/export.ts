@@ -7,12 +7,12 @@ export const loader: LoaderFunction = () => {
   const xlsxArray = [
     ["其中：共计#$%holder1#$%条，holer1 为占位符，是动态填充的内容"],
     [
-      "key(当前词条唯一标识，默认为中文，如有同一中文多种英文翻译的情况可做备用)",
+      "id(当前词条唯一标识，默认为中文，如有同一中文多种英文翻译的情况可做备用)",
       "中文",
       "英文",
     ],
   ];
-  const resetData = data.map((v) => [v.key, v["zh"]]);
+  const resetData = data.map((v) => [v.id, v["zh"]]);
   const buffer = xlsx.build([
     {
       name: "未翻译词条",
