@@ -8,13 +8,53 @@ describe("正则匹配文件中的 文案 和 id", () => {
   it.each([
     // "
     ['<Translate text="我是文案" />', "我是文案", undefined],
+
+    ['<Translate key="key" text="我是文案" />', "我是文案", undefined],
+    ['<Translate text="我是文案" key="key" />', "我是文案", undefined],
+
     ['<Translate text="我是文案" id="我是 id"/>', "我是文案", "我是 id"],
     ['<Translate id="我是 id" text="我是文案" />', "我是文案", "我是 id"],
 
+    [
+      '<Translate key="key" id="我是 id" text="我是文案" />',
+      "我是文案",
+      "我是 id",
+    ],
+    [
+      '<Translate  id="我是 id" key="key" text="我是文案" />',
+      "我是文案",
+      "我是 id",
+    ],
+    [
+      '<Translate  id="我是 id" text="我是文案" key="key" />',
+      "我是文案",
+      "我是 id",
+    ],
+
     // '
     ["<Translate text='我是文案' />", "我是文案", undefined],
+
+    ["<Translate key='key' text='我是文案' />", "我是文案", undefined],
+    ["<Translate text='我是文案' key='key' />", "我是文案", undefined],
+
     ["<Translate text='我是文案' id='我是 id'/>", "我是文案", "我是 id"],
     ["<Translate id='我是 id' text='我是文案' />", "我是文案", "我是 id"],
+
+    [
+      "<Translate key='key' id='我是 id' text='我是文案' />",
+      "我是文案",
+      "我是 id",
+    ],
+    [
+      "<Translate  id='我是 id' key='key' text='我是文案' />",
+      "我是文案",
+      "我是 id",
+    ],
+    [
+      "<Translate  id='我是 id' text='我是文案' key='key' />",
+      "我是文案",
+      "我是 id",
+    ],
 
     [
       "<Translate id='我是 id' text={`我#$%var#$%案`} />",
