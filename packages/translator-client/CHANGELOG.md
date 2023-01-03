@@ -1,5 +1,11 @@
 # translator-client
 
+## 0.1.0
+
+### Minor Changes
+
+- ebb74d1: 词条 key 的换为 id, Translate 支持 react 的关键词 key,
+
 ## 0.0.5
 
 ### Patch Changes
