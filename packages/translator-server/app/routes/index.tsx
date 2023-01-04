@@ -105,6 +105,7 @@ export default function Index() {
     [searchParams, setSearchParams]
   );
   const handleInputChange = (v: string) => {
+    handleCancel();
     setSearchWord(v);
     refetchWithSearchWord(v);
   };
