@@ -37,5 +37,4 @@ export const getLang = () => {
 
 export const setLang = (lang: SupportLanguagesType) => {
   localStorage.setItem("lang", lang);
-  location.reload();
 };

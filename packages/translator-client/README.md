@@ -32,7 +32,7 @@ declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 
 ### setLanguage
 
-切换语言的方法，切换后会自动 reload 页面
+切换语言的方法
 
 ```tsx
 type SupportLanguagesType = "zh-CN" | "en-US"
