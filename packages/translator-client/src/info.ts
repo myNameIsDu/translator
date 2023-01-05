@@ -30,7 +30,7 @@ export const getLang = () => {
     return lang;
 };
 
-export const setLang = (lang: SupportLanguagesType) => {
-    localStorage.setItem('lang', lang);
-    lang = lang;
+export const setLang = (nextLang: SupportLanguagesType) => {
+    localStorage.setItem('lang', nextLang);
+    lang = nextLang;
 };
