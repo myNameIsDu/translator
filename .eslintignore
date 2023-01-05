@@ -1,0 +1,16 @@
+node_modules
+
+package.json
+
+**/es/**
+**/lib/**
+**/types/**
+**/build/**
+**/public/**
+**/.cache/**
+**/dist/**
+.github/*
+.eslintrc.js
+.changeset/*
+pnpm-lock.yaml
+**/api-extractor.json
