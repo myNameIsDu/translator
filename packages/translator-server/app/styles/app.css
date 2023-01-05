@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.rs-table-cell-content .rs-form-control-wrapper{
+.rs-table-cell-content .rs-form-control-wrapper {
     position: absolute;
 }

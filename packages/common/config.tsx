@@ -1,4 +1,4 @@
-export const supportLanguages = ["zh", "en"] as const;
+export const supportLanguages = ['zh', 'en'] as const;
 export type SupportLanguagesType = typeof supportLanguages[number];
 
 export type LocalesItemType = Record<typeof supportLanguages[number], string>;

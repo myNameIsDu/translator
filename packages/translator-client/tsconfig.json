@@ -1,9 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "types",
-    "declaration": true,
-    "emitDeclarationOnly":true,
-    "jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */,
-  }
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "types",
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
+    }
 }

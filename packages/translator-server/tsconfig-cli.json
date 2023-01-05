@@ -1,8 +1,8 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
-        "rootDir": "./bin",                                  /* Specify the root folder within your source files. */
+        "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+        "rootDir": "./bin" /* Specify the root folder within your source files. */
     },
     "include": ["./bin/**/*"]
 }

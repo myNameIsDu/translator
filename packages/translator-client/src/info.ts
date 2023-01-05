@@ -1,8 +1,5 @@
-import { LocalesType } from "../../common/config";
-import {
-  type SupportLanguagesType,
-  supportLanguages,
-} from "../../common/config";
+import { LocalesType } from '../../common/config';
+import { type SupportLanguagesType, supportLanguages } from '../../common/config';
 
 /*
   这里抛弃使用 react context 传递的方法，因为这样会强依赖 react 上下文
@@ -12,30 +9,28 @@ import {
 export let locales: LocalesType = {};
 
 export let lang = ((): SupportLanguagesType => {
-  const storageLang = localStorage.getItem("lang");
-  if (storageLang && supportLanguages.includes(storageLang as any)) {
-    return storageLang as SupportLanguagesType;
-  }
-  let willSetLang: SupportLanguagesType = navigator.language.includes("zh")
-    ? "zh"
-    : "en";
-  localStorage.setItem("lang", willSetLang);
-  return willSetLang;
+    const storageLang = localStorage.getItem('lang');
+    if (storageLang && supportLanguages.includes(storageLang as any)) {
+        return storageLang as SupportLanguagesType;
+    }
+    let willSetLang: SupportLanguagesType = navigator.language.includes('zh') ? 'zh' : 'en';
+    localStorage.setItem('lang', willSetLang);
+    return willSetLang;
 })();
 
 export const setLocales = (nextLocales: LocalesType) => {
-  locales = nextLocales;
+    locales = nextLocales;
 };
 
 export const getLocales = () => {
-  return locales;
+    return locales;
 };
 
 export const getLang = () => {
-  return lang;
+    return lang;
 };
 
 export const setLang = (lang: SupportLanguagesType) => {
-  localStorage.setItem("lang", lang);
-  lang = lang;
+    localStorage.setItem('lang', lang);
+    lang = lang;
 };

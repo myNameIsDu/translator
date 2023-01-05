@@ -2,12 +2,12 @@
 
 ## 特点
 
-- 使用简单
-- 默认中文 id，无需特意声明各种 id，中文就写在代码中，所见以所得
-- 支持一个中文多种英文翻译 (特定 id)
-- 支持动态文案
-- 自动收集，并找出过期的翻译(在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
-- 可视化操作
+-   使用简单
+-   默认中文 id，无需特意声明各种 id，中文就写在代码中，所见以所得
+-   支持一个中文多种英文翻译 (特定 id)
+-   支持动态文案
+-   自动收集，并找出过期的翻译(在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
+-   可视化操作
 
 ## Install
 
@@ -24,9 +24,7 @@ pnpm install translator-server -D
 import locales from './locales/complete.json';
 import { TranslatorProvider } from 'translator-client';
 
-<TranslatorProvider locales={locales}>
-</TranslatorProvider>
-
+<TranslatorProvider locales={locales}></TranslatorProvider>;
 ```
 
 `src/locales/complete.json` 需要手动创建，并写入一个空对象
@@ -37,8 +35,8 @@ import { TranslatorProvider } from 'translator-client';
 
 ```tsx
 import { t } from 'translator-client';
-function Page (){
-    return t('文案')
+function Page() {
+    return t('文案');
 }
 ```
 
@@ -47,14 +45,14 @@ function Page (){
 ```tsx
 import { Translate } from 'translator-client';
 export const data = [
-  {
-    label: <Translate text="文案1" />,
-    value: '1',
-  },
-  {
-    label: <Translate text="文案1" />,
-    value: '2',
-  },
+    {
+        label: <Translate text="文案1" />,
+        value: '1',
+    },
+    {
+        label: <Translate text="文案1" />,
+        value: '2',
+    },
 ];
 ```
 
@@ -67,7 +65,7 @@ export const data = [
 react 上下文中的翻译方法
 
 ```tsx
-declare function t(s: string, { id }?: {id: string}): string;
+declare function t(s: string, { id }?: { id: string }): string;
 ```
 
 支持动态文案，例如
@@ -91,7 +89,7 @@ declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 切换语言的方法
 
 ```tsx
-type SupportLanguagesType = "zh" | "en"
+type SupportLanguagesType = 'zh' | 'en';
 
 declare const setLang: (lang: SupportLanguagesType) => void;
 ```
@@ -105,17 +103,17 @@ declare const setLang: (lang: SupportLanguagesType) => void;
 错误的写法
 
 ```tsx
-function Page(){
-  const text = isReal ? "文案1" : "文案2"
-  return t(text)
+function Page() {
+    const text = isReal ? '文案1' : '文案2';
+    return t(text);
 }
 ```
 
 正确写法
 
 ```tsx
-function Page(){
-  const text = isReal ? t("文案1") : t("文案2")
-  return text
+function Page() {
+    const text = isReal ? t('文案1') : t('文案2');
+    return text;
 }
 ```

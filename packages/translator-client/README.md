@@ -11,7 +11,7 @@ pnpm install translator-client
 react 上下文中的翻译方法
 
 ```tsx
-declare function t(s: string, { id }?: {id: string}): string;
+declare function t(s: string, { id }?: { id: string }): string;
 ```
 
 支持动态文案，例如
@@ -35,7 +35,7 @@ declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 切换语言的方法
 
 ```tsx
-type SupportLanguagesType = "zh-CN" | "en-US"
+type SupportLanguagesType = 'zh-CN' | 'en-US';
 
 declare const setLang: (lang: SupportLanguagesType) => void;
 ```
@@ -49,17 +49,17 @@ declare const setLang: (lang: SupportLanguagesType) => void;
 错误的写法
 
 ```tsx
-function Page(){
-  const text = isReal ? "文案1" : "文案2"
-  return t(text)
+function Page() {
+    const text = isReal ? '文案1' : '文案2';
+    return t(text);
 }
 ```
 
 正确写法
 
 ```tsx
-function Page(){
-  const text = isReal ? t("文案1") : t("文案2")
-  return text
+function Page() {
+    const text = isReal ? t('文案1') : t('文案2');
+    return text;
 }
 ```

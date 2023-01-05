@@ -10,7 +10,7 @@ pnpm translator
 
 ## 约定
 
-1. 工作目录下  `src/locales/complete.json` 为存放语言包的文件
+1. 工作目录下 `src/locales/complete.json` 为存放语言包的文件
 2. 所有需要翻译的文案及使用当前工具的工作目录为`src`，即扫描收集文案会在 `src` 目录下进行
 
 ## 开发
