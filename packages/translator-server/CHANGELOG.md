@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 8a4af6d: setLang 时更新当前 lang, 搜索文案时取消 edit
+-   8a4af6d: setLang 时更新当前 lang, 搜索文案时取消 edit
 
 ## 0.1.0
 
