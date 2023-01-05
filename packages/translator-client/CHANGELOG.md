@@ -1,5 +1,11 @@
 # translator-client
 
+## 0.1.3
+
+### Patch Changes
+
+-   9263efa: 修复 setLang 未更改当前 lang
+
 ## 0.1.2
 
 ### Patch Changes
