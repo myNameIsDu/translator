@@ -1,5 +1,11 @@
 # translator-server
 
+## 0.1.3
+
+### Patch Changes
+
+-   17a8157: 锁定 remix 版本,修复安装包时隐形升级导致的 remix 版本错误
+
 ## 0.1.2
 
 ### Patch Changes
