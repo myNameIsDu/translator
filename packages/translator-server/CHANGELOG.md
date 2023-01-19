@@ -1,5 +1,11 @@
 # translator-server
 
+## 0.1.2
+
+### Patch Changes
+
+-   13b03b4: 修复下载安装包时隐形依赖升级导致的 remix 版本错误
+
 ## 0.1.1
 
 ### Patch Changes
