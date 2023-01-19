@@ -11,3 +11,4 @@ node_modules
 .changeset/*
 pnpm-lock.yaml
 api-extractor.json
+**/npm-shrinkwrap.json
