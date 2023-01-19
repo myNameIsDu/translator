@@ -1,17 +1,17 @@
 {
   "name": "translator-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "translator-server",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "license": "MIT",
       "dependencies": {
-        "@remix-run/express": "^1.8.2",
-        "@remix-run/node": "^1.8.2",
-        "@remix-run/react": "^1.8.2",
+        "@remix-run/express": "1.8.2",
+        "@remix-run/node": "1.8.2",
+        "@remix-run/react": "1.8.2",
         "@rsuite/icons": "^1.0.2",
         "@types/glob": "^8.0.0",
         "autoprefixer": "^10.4.13",
@@ -37,8 +37,8 @@
         "translator": "dist/translator.js"
       },
       "devDependencies": {
-        "@remix-run/dev": "^1.8.2",
-        "@remix-run/eslint-config": "^1.8.2",
+        "@remix-run/dev": "1.8.2",
+        "@remix-run/eslint-config": "1.8.2",
         "@types/lodash": "^4.14.191",
         "@types/react": "^18.0.25",
         "@types/react-dom": "^18.0.8",
@@ -27907,6 +27907,10 @@
     "../../node_modules/.pnpm/postcss-load-config@3.1.4_postcss@8.4.20": {},
     "../../node_modules/.pnpm/postcss-load-config@3.1.4_postcss@8.4.20/node_modules/lilconfig": {
       "resolved": "../../node_modules/.pnpm/lilconfig@2.0.6/node_modules/lilconfig",
+      "link": true
+    },
+    "../../node_modules/.pnpm/postcss-load-config@3.1.4_postcss@8.4.20/node_modules/postcss": {
+      "resolved": "../../node_modules/.pnpm/postcss@8.4.20/node_modules/postcss",
       "link": true
     },
     "../../node_modules/.pnpm/postcss-load-config@3.1.4_postcss@8.4.20/node_modules/postcss-load-config": {
