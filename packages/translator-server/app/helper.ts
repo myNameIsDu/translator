@@ -1,6 +1,6 @@
 import { completeJsonPath, workDirSrcPath } from './const';
 import { type LocalesType, type RecordType } from '../../common/config';
-import { holderFinder } from '../../common/utils';
+import { simpleHolderFinder } from '../../common/utils';
 import fs from 'fs';
 import glob from '../glob.server';
 
@@ -45,7 +45,7 @@ export function getAllTextAndId() {
                     }
                 }
             }
-            const holder = holderFinder(matchedText!).holder;
+            const holder = simpleHolderFinder(matchedText!).holder;
             let realId = matchedId || holder;
             if (!allIds.includes(realId)) {
                 allIds.push(realId);
@@ -57,7 +57,7 @@ export function getAllTextAndId() {
         matchTResult.forEach(({ groups = {} }) => {
             const matchedText: string | undefined = groups.text;
             const matchedId: string | undefined = groups.id;
-            const holder = holderFinder(matchedText!).holder;
+            const holder = simpleHolderFinder(matchedText!).holder;
             let realId = matchedId || holder;
             if (!allIds.includes(realId)) {
                 allIds.push(realId);

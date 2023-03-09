@@ -13,7 +13,7 @@ export let lang = ((): SupportLanguagesType => {
     if (storageLang && supportLanguages.includes(storageLang as any)) {
         return storageLang as SupportLanguagesType;
     }
-    let willSetLang: SupportLanguagesType = navigator.language.includes('zh') ? 'zh' : 'en';
+    const willSetLang: SupportLanguagesType = navigator.language.includes('zh') ? 'zh' : 'en';
     localStorage.setItem('lang', willSetLang);
     return willSetLang;
 })();

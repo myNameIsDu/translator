@@ -3,10 +3,10 @@
 ## 特点
 
 -   使用简单
--   默认中文 id，无需特意声明各种 id，中文就写在代码中，所见以所得
+-   默认中文 id，无需特意声明各种 id，中文就写在代码中，高可读性
 -   支持一个中文多种英文翻译 (特定 id)
 -   支持动态文案
--   自动收集，并找出过期的翻译(在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
+-   自动收集，并找出过期的翻译 (在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
 -   可视化操作
 
 ## Install
@@ -18,13 +18,13 @@ pnpm install translator-server -D
 
 ## Get Start
 
-1. 导入 `Provider`，从 `src/locales/complete.json` 导入 语言包，并传入 `Provider`
+1. 在入口文件，导入 `setLocales`，从 `src/locales/complete.json` 导入 语言包，并传入 `setLocales`
 
 ```tsx
 import locales from './locales/complete.json';
-import { TranslatorProvider } from 'translator-client';
+import { setLocales } from 'translator-client';
 
-<TranslatorProvider locales={locales}></TranslatorProvider>;
+setLocales(locales);
 ```
 
 `src/locales/complete.json` 需要手动创建，并写入一个空对象
@@ -71,10 +71,18 @@ declare function t(s: string, { id }?: { id: string }): string;
 支持动态文案，例如
 
 ```tsx
-t(`共计#$%${var}#$%`)
+t(`共计<${var}>`)
 ```
 
 其中动态的部分会被替换为 `holder1` 并作为 `id` 使用
+
+如果确需 `<>` 字符，则可使用转义符，例如
+
+```tsx
+t(`文案/<文案/>`);
+```
+
+在渲染时转义符会被自动去除
 
 ### Translate
 
@@ -92,6 +100,19 @@ declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 type SupportLanguagesType = 'zh' | 'en';
 
 declare const setLang: (lang: SupportLanguagesType) => void;
+```
+
+### setLocales
+
+设置翻译包
+
+```tsx
+export declare const supportLanguages: readonly ['zh', 'en'];
+export declare type SupportLanguagesType = typeof supportLanguages[number];
+export declare type LocalesItemType = Record<SupportLanguagesType, string>;
+export declare type LocalesType = Record<string, LocalesItemType>;
+
+export declare const setLocales: (nextLocales: LocalesType) => void;
 ```
 
 ## 强绑定的文案和`t`

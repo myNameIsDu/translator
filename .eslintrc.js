@@ -3,6 +3,7 @@ module.exports = {
         browser: true,
         es2021: true,
         jest: true,
+        node: true,
     },
     extends: [
         'eslint:recommended',
@@ -13,6 +14,7 @@ module.exports = {
         'plugin:jest/style',
         'plugin:jest-dom/recommended',
         'plugin:testing-library/dom',
+        'prettier',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {

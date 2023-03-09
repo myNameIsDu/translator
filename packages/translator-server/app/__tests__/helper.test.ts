@@ -32,7 +32,8 @@ describe('正则匹配文件中的 文案 和 id', () => {
         ["<Translate  id='我是 id' key='key' text='我是文案' />", '我是文案', '我是 id'],
         ["<Translate  id='我是 id' text='我是文案' key='key' />", '我是文案', '我是 id'],
 
-        ["<Translate id='我是 id' text={`我#$%var#$%案`} />", '我#$%var#$%案', '我是 id'],
+        // `
+        ["<Translate id='我是 id' text={`我<var>案`} />", '我<var>案', '我是 id'],
     ])('匹配 %s 中的 %s 和 %s', (content, text, id) => {
         const matchResult = matchTranslateRegex.exec(content);
         const groups = matchResult?.groups || {};
@@ -64,7 +65,7 @@ describe('正则匹配文件中的 文案 和 id', () => {
         ["t('我是文案', { id : '我是 id' })", '我是文案', '我是 id'],
 
         // `
-        ['t(`我#$%var#$%案`)', '我#$%var#$%案', undefined],
+        ['t(`我<var>案`)', '我<var>案', undefined],
     ])('匹配 %s 中的 %s 和 %s', (content, text, id) => {
         const matchResult = matchTRegex.exec(content);
         const groups = matchResult?.groups || {};

@@ -5,7 +5,7 @@ import { getUnTranslate } from '../helper';
 export const loader: LoaderFunction = () => {
     const data = getUnTranslate();
     const xlsxArray = [
-        ['其中：共计#$%holder1#$%条，holer1 为占位符，是动态填充的内容'],
+        ['其中：共计<holder1>条，holer1 为占位符，是动态填充的内容'],
         [
             'id(当前词条唯一标识，默认为中文，如有同一中文多种英文翻译的情况可做备用)',
             '中文',

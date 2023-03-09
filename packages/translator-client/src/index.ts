@@ -1,4 +1,3 @@
-export { TranslatorProvider, type TranslatorProviderPropsType } from './provider';
 export { t, Translate, type TranslatePropsType, type TSecondParamsType } from './translate';
 export {
     supportLanguages,

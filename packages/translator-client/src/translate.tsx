@@ -1,4 +1,4 @@
-import { holderFinder, matchHolderRegex } from '../../common/utils';
+import { simpleHolderFinder, replaceHolderToRealText } from '../../common/utils';
 import { getLang, getLocales } from './info';
 
 export interface TranslatePropsType {
@@ -9,13 +9,14 @@ export interface TranslatePropsType {
 export function Translate({ text, id }: TranslatePropsType): JSX.Element {
     const currentLang = getLang();
     const locales = getLocales();
-    const { extra, holder } = holderFinder(text);
+    const { extra, holder } = simpleHolderFinder(text);
     const realId = id || holder;
 
-    const localesText = locales[realId]?.[currentLang] || holder;
-    const resultText = localesText.replace(matchHolderRegex, (_, $1) => extra[$1]);
+    const translatedText = locales[realId]?.[currentLang] || holder;
+    // 替换 holder 为动态内容，并且删除转义符
+    const resultsText = replaceHolderToRealText(translatedText, extra);
 
-    return resultText as unknown as JSX.Element;
+    return resultsText as unknown as JSX.Element;
 }
 
 export interface TSecondParamsType {
