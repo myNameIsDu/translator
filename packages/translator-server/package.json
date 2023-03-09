@@ -24,7 +24,7 @@
         "dev:node": "cross-env NODE_ENV=development nodemon --require dotenv/config ./server.js --watch ./server.js",
         "dev:remix": "remix watch",
         "cli": "tsc --project ./tsconfig-cli.json -w",
-        "dev-cli": "concurrently  \"remix build\" \"pnpm run dev:remix\" \"pnpm run cli\" \"pnpm run dev:css\"",
+        "dev-cli": "pnpm run build:css && remix build && concurrently \"pnpm run dev:remix\" \"pnpm run cli\" \"pnpm run dev:css\"",
         "build": "npm run build:css && remix build && tsc --project ./tsconfig-cli.json",
         "start": "cross-env NODE_ENV=production node ./server.js",
         "typecheck": "tsc -b"
