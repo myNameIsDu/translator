@@ -40,5 +40,6 @@ export const action: ActionFunction = async ({ request }) => {
     const completeData = readObjectComplete();
     const resultData = { ...completeData, ...translatedObj };
     fs.writeFileSync(completeJsonPath, JSON.stringify(resultData, null, 2));
+    await file.remove();
     return new Response();
 };
