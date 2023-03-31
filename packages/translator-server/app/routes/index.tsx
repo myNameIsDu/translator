@@ -199,7 +199,7 @@ export default function Index() {
                             }
                         </Cell>
                     </Colum>
-                    <Colum align="left" flexGrow={1} width={450}>
+                    <Colum align="left" fullText flexGrow={1} width={450}>
                         <HeaderCell>中文</HeaderCell>
                         <Cell>
                             {rowData =>

@@ -66,6 +66,14 @@ describe('正则匹配文件中的 文案 和 id', () => {
 
         // `
         ['t(`我<var>案`)', '我<var>案', undefined],
+
+        [
+            `t(
+            '超长字符串，在 prettier 下会换行'
+          )`,
+            '超长字符串，在 prettier 下会换行',
+            undefined,
+        ],
     ])('匹配 %s 中的 %s 和 %s', (content, text, id) => {
         const matchResult = matchTRegex.exec(content);
         const groups = matchResult?.groups || {};

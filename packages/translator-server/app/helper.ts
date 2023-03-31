@@ -5,10 +5,10 @@ import fs from 'fs';
 import glob from '../glob.server';
 
 export const matchTranslateRegex =
-    /<Translate( |\n|\t)*((text=((?<q1>["'])|({`))(?<text1>.*?)((\k<q1>)|(`})))|(id=(?<q2>["'])(?<id1>.*?)\k<q2>)|(key=(?<q3>["'])(.*?)\k<q3>))?( |\n|\t)*((text=((?<q4>["'])|({`))(?<text2>.*?)((\k<q4>)|(`})))|(id=(?<q5>["'])(?<id2>.*?)\k<q5>)|(key=(?<q6>["'])(.*?)\k<q6>))?( |\n|\t)*?((text=((?<q7>["'])|({`))(?<text3>.*?)((\k<q7>)|(`})))|(id=(?<q8>["'])(?<id3>.*?)\k<q8>)|(key=(?<q9>["'])(.*?)\k<q9>))?( |\n|\t)*?\/>/g;
+    /<Translate\s*((text=((?<q1>["'])|({`))(?<text1>.*?)((\k<q1>)|(`})))|(id=(?<q2>["'])(?<id1>.*?)\k<q2>)|(key=(?<q3>["'])(.*?)\k<q3>))?\s*((text=((?<q4>["'])|({`))(?<text2>.*?)((\k<q4>)|(`})))|(id=(?<q5>["'])(?<id2>.*?)\k<q5>)|(key=(?<q6>["'])(.*?)\k<q6>))?\s*?((text=((?<q7>["'])|({`))(?<text3>.*?)((\k<q7>)|(`})))|(id=(?<q8>["'])(?<id3>.*?)\k<q8>)|(key=(?<q9>["'])(.*?)\k<q9>))?\s*?\/>/g;
 
 export const matchTRegex =
-    /\bt\((?<q1>["`'])(?<text>.*?)\k<q1>(,( |\n|\t)*\{( |\n|\t)*id( |\n|\t)*:( |\n|\t)*(?<q2>["'])(?<id>.*?)\k<q2>( |\n|\t)*\})?\)/g;
+    /\bt\(\s*(?<q1>["`'])(?<text>.*?)\k<q1>(,\s*\{\s*id\s*:\s*(?<q2>["'])(?<id>.*?)\k<q2>\s*\})?\s*\)/g;
 
 export function readObjectComplete(): LocalesType {
     return JSON.parse(fs.readFileSync(completeJsonPath, 'utf-8'));
