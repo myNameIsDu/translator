@@ -1,5 +1,11 @@
 # translator-client
 
+## 0.2.1
+
+### Patch Changes
+
+-   219efef: 修复 在 t(\n xxxx \n) 的情况下正则不匹配, 无法提取文案
+
 ## 0.2.0
 
 ### Minor Changes
