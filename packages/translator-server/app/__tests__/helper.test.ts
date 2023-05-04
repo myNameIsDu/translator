@@ -34,6 +34,8 @@ describe('正则匹配文件中的 文案 和 id', () => {
 
         // `
         ["<Translate id='我是 id' text={`我<var>案`} />", '我<var>案', '我是 id'],
+
+        ["<Translate id='我是 id' text={`超长换\n行字符`} />", '超长换\n行字符', '我是 id'],
     ])('匹配 %s 中的 %s 和 %s', (content, text, id) => {
         const matchResult = matchTranslateRegex.exec(content);
         const groups = matchResult?.groups || {};
@@ -67,13 +69,9 @@ describe('正则匹配文件中的 文案 和 id', () => {
         // `
         ['t(`我<var>案`)', '我<var>案', undefined],
 
-        [
-            `t(
-            '超长字符串，在 prettier 下会换行'
-          )`,
-            '超长字符串，在 prettier 下会换行',
-            undefined,
-        ],
+        ["t(\n'超长字符串，prettier 括号会换行'\n)", '超长字符串，prettier 括号会换行', undefined],
+
+        ["t('超长字符串\n换行字符串')", '超长字符串\n换行字符串', undefined],
     ])('匹配 %s 中的 %s 和 %s', (content, text, id) => {
         const matchResult = matchTRegex.exec(content);
         const groups = matchResult?.groups || {};

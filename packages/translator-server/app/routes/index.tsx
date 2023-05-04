@@ -1,3 +1,4 @@
+import React from 'react';
 import SearchIcon from '@rsuite/icons/Search';
 import {
     Panel,
@@ -20,6 +21,8 @@ import { readArrayComplete, getAllTextAndId, readObjectComplete, getUnTranslate 
 const Colum = Table.Column;
 const HeaderCell = Table.HeaderCell;
 const Cell = Table.Cell;
+
+const Textarea = React.forwardRef((props, ref) => <Input {...props} as="textarea" ref={ref} />);
 
 const filterData = [
     {
@@ -181,57 +184,70 @@ export default function Index() {
                         导入翻译
                     </Button>
                 </div>
-                <Table height={800} virtualized data={loaderData}>
+                <Table height={800} wordWrap data={loaderData}>
                     <Colum align="left" flexGrow={1} width={450}>
                         <HeaderCell>id(当前词条的唯一标识，默认为中文)</HeaderCell>
                         <Cell>
-                            {rowData =>
-                                rowData.id === editId ? (
-                                    <Form.Control
-                                        name="id"
-                                        disabled
-                                        className="relative left-0 top-[-8px]"
-                                        defaultValue={rowData['id']}
-                                    />
-                                ) : (
-                                    rowData['id']
-                                )
-                            }
+                            {rowData => {
+                                const rowDataId = rowData.id;
+                                if (rowDataId === editId) {
+                                    return (
+                                        <Form.Control
+                                            name="id"
+                                            disabled
+                                            accepter={Textarea}
+                                            defaultValue={rowDataId}
+                                        />
+                                    );
+                                } else {
+                                    return <pre className="m-[0]">{rowDataId}</pre>;
+                                }
+                            }}
                         </Cell>
                     </Colum>
                     <Colum align="left" fullText flexGrow={1} width={450}>
                         <HeaderCell>中文</HeaderCell>
                         <Cell>
-                            {rowData =>
-                                rowData.id === editId ? (
-                                    <Form.Control
-                                        name="zh"
-                                        disabled
-                                        className="relative left-0 top-[-8px]"
-                                        defaultValue={rowData['zh']}
-                                    />
-                                ) : (
-                                    rowData['zh']
-                                )
-                            }
+                            {rowData => {
+                                const rowDataId = rowData.id;
+                                const rowDataZh = rowData['zh'];
+
+                                if (rowDataId === editId) {
+                                    return (
+                                        <Form.Control
+                                            name="zh"
+                                            disabled
+                                            accepter={Textarea}
+                                            defaultValue={rowDataZh}
+                                        />
+                                    );
+                                } else {
+                                    return <pre className="m-[0]">{rowDataZh}</pre>;
+                                }
+                            }}
                         </Cell>
                     </Colum>
                     <Colum align="left" flexGrow={1} width={450}>
                         <HeaderCell>英文</HeaderCell>
                         <Cell>
-                            {rowData =>
-                                rowData.id === editId ? (
-                                    <Form.Control
-                                        rule={Schema.Types.StringType().isRequired('请输入')}
-                                        name="en"
-                                        className="relative left-0 top-[-8px]"
-                                        errorPlacement="rightStart"
-                                        defaultValue={rowData['en']}
-                                    />
-                                ) : (
-                                    rowData['en']
-                                )
-                            }
+                            {rowData => {
+                                const rowDataId = rowData.id;
+                                const rowDataEn = rowData['en'];
+
+                                if (rowDataId === editId) {
+                                    return (
+                                        <Form.Control
+                                            rule={Schema.Types.StringType().isRequired('请输入')}
+                                            name="en"
+                                            errorPlacement="rightStart"
+                                            defaultValue={rowDataEn}
+                                            accepter={Textarea}
+                                        />
+                                    );
+                                } else {
+                                    return <pre className="m-[0]">{rowDataEn}</pre>;
+                                }
+                            }}
                         </Cell>
                     </Colum>
                     <Colum align="center" width={200}>
@@ -243,15 +259,20 @@ export default function Index() {
                                     <div>
                                         {editId === id ? (
                                             <>
-                                                <Button appearance="link" type="submit">
+                                                <Button size="sm" appearance="link" type="submit">
                                                     save
                                                 </Button>
-                                                <Button appearance="link" onClick={handleCancel}>
+                                                <Button
+                                                    size="sm"
+                                                    appearance="link"
+                                                    onClick={handleCancel}
+                                                >
                                                     cancel
                                                 </Button>
                                             </>
                                         ) : (
                                             <Button
+                                                size="sm"
                                                 disabled={editId !== null}
                                                 appearance="link"
                                                 onClick={() => handleEdit(rowData)}
@@ -261,6 +282,7 @@ export default function Index() {
                                         )}
                                         {type !== 'unTranslate' && !editId && (
                                             <Button
+                                                size="sm"
                                                 onClick={() => handleDelete(id)}
                                                 appearance="link"
                                             >
