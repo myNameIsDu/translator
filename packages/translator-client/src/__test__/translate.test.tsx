@@ -64,4 +64,71 @@ describe('t 函数', () => {
             expect(t('文/<hi/>案')).toBe('文<hi>案');
         });
     });
+
+    describe('存在 xml', () => {
+        it('当存在 xml 时，替换函数返回的内容', () => {
+            expect(
+                t('共计<span>特殊</span><page>页', {
+                    span: children => (
+                        <span key="span" style={{ color: 'red' }}>
+                            {children}
+                        </span>
+                    ),
+                }),
+            ).toEqual([
+                '共计',
+                <span key="span" style={{ color: 'red' }}>
+                    特殊
+                </span>,
+                'page页',
+            ]);
+        });
+
+        it('当存在 多个 xml 时，替换函数返回的内容', () => {
+            expect(
+                t('共计<span>特殊</span><strong>标签</strong><page>页', {
+                    span: children => (
+                        <span key="span" style={{ color: 'red' }}>
+                            {children}
+                        </span>
+                    ),
+                    strong: children => <strong key="strong">{children}</strong>,
+                }),
+            ).toEqual([
+                '共计',
+                <span key="span" style={{ color: 'red' }}>
+                    特殊
+                </span>,
+                <strong key="strong">标签</strong>,
+                'page页',
+            ]);
+        });
+
+        it('当存在 嵌套 xml 时，替换函数返回的内容', () => {
+            expect(
+                t('共计<span>特殊<strong>标签</strong></span><page>页', {
+                    span: children => (
+                        <span key="span" style={{ color: 'red' }}>
+                            {children}
+                        </span>
+                    ),
+                    strong: children => <strong key="strong">{children}</strong>,
+                }),
+            ).toEqual([
+                '共计',
+                <span key="span" style={{ color: 'red' }}>
+                    特殊<strong key="strong">标签</strong>
+                </span>,
+                'page页',
+            ]);
+        });
+
+        it('当存在  xml 时，替换函数返回为纯字符串时，返回字符串', () => {
+            expect(
+                t('共计<span>特殊</span><page>页', {
+                    span: c => `<span style='color:red'>${c}</span>`,
+                }),
+            ).toBe("共计<span style='color:red'>特殊</span>page页");
+        });
+    });
 });
