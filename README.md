@@ -1,4 +1,4 @@
-## 一个简单的国际化工具
+# 一个简单的国际化工具
 
 ## 特点
 
@@ -6,6 +6,7 @@
 -   默认中文 id，无需特意声明各种 id，中文就写在代码中，高可读性
 -   支持一个中文多种英文翻译 (特定 id)
 -   支持动态文案
+-   支持 xml 解决多元素语义问题
 -   自动收集，并找出过期的翻译 (在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
 -   可视化操作
 
@@ -15,6 +16,8 @@
 pnpm install translator-client
 pnpm install translator-server -D
 ```
+
+主要注意的是，由于 `translator-server` 内置依赖 `react`，所以在 `npm` 下可能导致版本冲突，建议使用 `pnpm`
 
 ## Get Start
 
@@ -68,7 +71,7 @@ react 上下文中的翻译方法
 declare function t(s: string, { id }?: { id: string }): string;
 ```
 
-支持动态文案，例如
+#### 支持动态文案，例如
 
 ```tsx
 t(`共计<${var}>`)
@@ -83,6 +86,30 @@ t(`文案/<文案/>`);
 ```
 
 在渲染时转义符会被自动去除
+
+#### xml
+
+```tsx
+t('共计<span>特殊</span><page>页', {
+    span: children => (
+        <span key="span" style={{ color: 'red' }}>
+            {children}
+        </span>
+    ),
+});
+```
+
+当 xml 替换函数返回 字符串时，t 函数也会尽量返回字符串
+
+```tsx
+expect(
+    t('共计<span>特殊</span><page>页', {
+        span: c => `<span style='color:red'>${c}</span>`,
+    }),
+).toBe("共计<span style='color:red'>特殊</span>page页");
+```
+
+更多用例[请查看](./packages/translator-client/src/__test__/translate.test.tsx)
 
 ### Translate
 
