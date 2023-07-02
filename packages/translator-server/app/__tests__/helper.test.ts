@@ -1,9 +1,8 @@
-import { matchTranslateRegex, matchTRegex } from '../helper';
+import { matchTranslateRegex } from '../helper';
 
-describe('正则匹配文件中的 文案 和 id', () => {
+describe('Translate 正则匹配文件中的 文案 和 id', () => {
     afterEach(() => {
         matchTranslateRegex.lastIndex = 0;
-        matchTRegex.lastIndex = 0;
     });
     it.each([
         // "
@@ -51,33 +50,6 @@ describe('正则匹配文件中的 文案 和 id', () => {
                 }
             }
         }
-        expect(matchedText).toBe(text);
-        expect(matchedId).toBe(id);
-    });
-
-    it.each([
-        // "
-        ['t("我是文案")', '我是文案', undefined],
-        ['t("我是文案",{id:"我是 id"})', '我是文案', '我是 id'],
-        ['t("我是文案", { id : "我是 id" })', '我是文案', '我是 id'],
-
-        // '
-        ["t('我是文案')", '我是文案', undefined],
-        ["t('我是文案',{id:'我是 id'})", '我是文案', '我是 id'],
-        ["t('我是文案', { id : '我是 id' })", '我是文案', '我是 id'],
-
-        // `
-        ['t(`我<var>案`)', '我<var>案', undefined],
-
-        ["t(\n'超长字符串，prettier 括号会换行'\n)", '超长字符串，prettier 括号会换行', undefined],
-
-        ["t('超长字符串\n换行字符串')", '超长字符串\n换行字符串', undefined],
-    ])('匹配 %s 中的 %s 和 %s', (content, text, id) => {
-        const matchResult = matchTRegex.exec(content);
-        const groups = matchResult?.groups || {};
-        const matchedText: string | undefined = groups.text;
-        const matchedId: string | undefined = groups.id;
-
         expect(matchedText).toBe(text);
         expect(matchedId).toBe(id);
     });

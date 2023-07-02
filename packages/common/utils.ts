@@ -32,7 +32,7 @@ export const simpleHolderFinder = (msg: string) => {
         },
     );
     return {
-        holder: holder || message,
+        holder: holder,
         extra,
     };
 };
@@ -48,7 +48,7 @@ export const replaceHolderToRealText = (msg: string, extra: Record<string, strin
             }
             // 替换为真实数据
             const realText = extra[$3];
-            // 如果存在左占位符则当做正常文本
+            // 如果存在左转义符则当做正常文本
             return $2 ? $2 + realText : realText;
         },
     );

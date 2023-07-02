@@ -1,14 +1,17 @@
 import { completeJsonPath, workDirSrcPath } from './const';
 import { type LocalesType, type RecordType } from '../../common/config';
 import { simpleHolderFinder } from '../../common/utils';
+import { getTCalledTextAndId } from './parser-t';
 import fs from 'fs';
 import glob from '../glob.server';
+import { splitText } from '../../common/split-text';
+import { getHolderAndExtraFromAst } from '../../common/get-holder-and-extra';
 
 export const matchTranslateRegex =
     /<Translate\s*((text=((?<q1>["'])|({`))(?<text1>(.|\n)*?)((\k<q1>)|(`})))|(id=(?<q2>["'])(?<id1>.*?)\k<q2>)|(key=(?<q3>["'])(.*?)\k<q3>))?\s*((text=((?<q4>["'])|({`))(?<text2>(.|\n)*?)((\k<q4>)|(`})))|(id=(?<q5>["'])(?<id2>.*?)\k<q5>)|(key=(?<q6>["'])(.*?)\k<q6>))?\s*?((text=((?<q7>["'])|({`))(?<text3>(.|\n)*?)((\k<q7>)|(`})))|(id=(?<q8>["'])(?<id3>.*?)\k<q8>)|(key=(?<q9>["'])(.*?)\k<q9>))?\s*?\/>/g;
 
-export const matchTRegex =
-    /\bt\(\s*(?<q1>["`'])(?<text>(.|\n)*?)\k<q1>(,\s*\{\s*id\s*:\s*(?<q2>["'])(?<id>.*?)\k<q2>\s*\})?\s*\)/g;
+// export const matchTRegex =
+//   /\bt\(\s*(?<q1>["`'])(?<text>(?:[\s\S])*?)\k<q1>(,\s*\{(?:(?:\s*id\s*:\s*(?<q2>["'])(?<id>.*?)\k<q2>\s*,?\s*)|(?<a>\s*[a-zA-Z_]\w*\s*,?\s*))*\})?\s*\)/g;
 
 export function readObjectComplete(): LocalesType {
     return JSON.parse(fs.readFileSync(completeJsonPath, 'utf-8'));
@@ -53,11 +56,14 @@ export function getAllTextAndId() {
             }
         });
 
-        const matchTResult = [...content.matchAll(matchTRegex)];
-        matchTResult.forEach(({ groups = {} }) => {
-            const matchedText: string | undefined = groups.text;
-            const matchedId: string | undefined = groups.id;
-            const holder = simpleHolderFinder(matchedText!).holder;
+        const matchTResult = getTCalledTextAndId(content);
+        matchTResult.forEach(({ text: matchedText, id: matchedId, replaceXml }) => {
+            let holder = '';
+            if (replaceXml) {
+                holder = getHolderAndExtraFromAst(splitText(matchedText)).holder;
+            } else {
+                holder = simpleHolderFinder(matchedText).holder;
+            }
             let realId = matchedId || holder;
             if (!allIds.includes(realId)) {
                 allIds.push(realId);

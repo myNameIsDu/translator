@@ -55,6 +55,9 @@
         "tailwindcss": "^3.2.4"
     },
     "devDependencies": {
+        "@babel/generator": "^7.22.5",
+        "@babel/parser": "^7.22.5",
+        "@babel/traverse": "^7.22.5",
         "@remix-run/dev": "1.12.0",
         "@remix-run/eslint-config": "1.12.0",
         "@types/lodash": "^4.14.191",
