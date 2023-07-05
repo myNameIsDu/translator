@@ -1,5 +1,11 @@
 # translator-server
 
+## 0.3.0
+
+### Minor Changes
+
+-   21a14ab: t 函数增加支持 xml 解决 多元素 语序问题
+
 ## 0.2.2
 
 ### Patch Changes
