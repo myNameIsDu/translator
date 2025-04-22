@@ -13,10 +13,14 @@ export const getHolderAndExtraFromAst = (v: DistinguishedItemType[]) => {
             holder += element.text;
         }
         if (element.type === 'xml') {
-            if (element.closed) {
-                holder += `</${element.text}>`;
+            if ('closedSelf' in element) {
+                holder += `<${element.text}/>`;
             } else {
-                holder += `<${element.text}>`;
+                if (element.closed) {
+                    holder += `</${element.text}>`;
+                } else {
+                    holder += `<${element.text}>`;
+                }
             }
         }
         if (element.type.startsWith('holder')) {

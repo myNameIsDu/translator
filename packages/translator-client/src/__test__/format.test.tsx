@@ -1,7 +1,7 @@
 import { format, type FormattedResult } from '../format';
 import type { DistinguishedItemType } from '../../../common/types';
 
-describe('form 拼接 ast 和 replaceXml', () => {
+describe('format 拼接 ast 和 replaceXml', () => {
     it.each([
         [
             [
@@ -53,7 +53,7 @@ describe('form 拼接 ast 和 replaceXml', () => {
                 },
             ],
             {
-                span: (children: FormattedResult) => {
+                span: (children?: FormattedResult) => {
                     return (
                         <span key="span" style={{ color: 'red' }}>
                             {children}
@@ -102,7 +102,7 @@ describe('form 拼接 ast 和 replaceXml', () => {
                 },
             ],
             {
-                span: (children: FormattedResult) => {
+                span: (children?: FormattedResult) => {
                     return (
                         <span key="span" style={{ color: 'red' }}>
                             {children}
@@ -166,14 +166,14 @@ describe('form 拼接 ast 和 replaceXml', () => {
                 },
             ],
             {
-                span: (children: FormattedResult) => {
+                span: (children?: FormattedResult) => {
                     return (
                         <span key="span" style={{ color: 'red' }}>
                             {children}
                         </span>
                     );
                 },
-                bold: (children: FormattedResult) => {
+                bold: (children?: FormattedResult) => {
                     return <strong key="strong">{children}</strong>;
                 },
             },
@@ -234,14 +234,14 @@ describe('form 拼接 ast 和 replaceXml', () => {
                 },
             ],
             {
-                span: (children: FormattedResult) => {
+                span: (children?: FormattedResult) => {
                     return (
                         <span key="span" style={{ color: 'red' }}>
                             {children}
                         </span>
                     );
                 },
-                bold: (children: FormattedResult) => {
+                bold: (children?: FormattedResult) => {
                     return <strong key="strong">{children}</strong>;
                 },
             },
@@ -251,6 +251,44 @@ describe('form 拼接 ast 和 replaceXml', () => {
                     特殊<strong key="strong">标签</strong>
                 </span>,
                 'page页',
+            ],
+        ],
+        [
+            [
+                { type: 'normal', text: '以ID数量在' },
+                { type: 'xml', text: 'inputGroup', couple: 9, closed: false },
+                { type: 'xml', text: 'addon1', couple: 4, closed: false },
+                { type: 'normal', text: '前' },
+                { type: 'xml', text: 'addon1', couple: 2, closed: true },
+                { type: 'xml', text: 'input', closedSelf: true },
+                { type: 'xml', text: 'addon2', couple: 8, closed: false },
+                { type: 'normal', text: '%' },
+                { type: 'xml', text: 'addon2', couple: 6, closed: true },
+                { type: 'xml', text: 'inputGroup', couple: 1, closed: true },
+                { type: 'normal', text: '的值维度参与计算' },
+            ],
+            {
+                inputGroup: (children?: FormattedResult) => {
+                    return <div key="div">{children}</div>;
+                },
+                addon1: (children?: FormattedResult) => {
+                    return <em key="em">{children}</em>;
+                },
+                addon2: (children?: FormattedResult) => {
+                    return <strong key="strong">{children}</strong>;
+                },
+                input: () => {
+                    return <input key="input" />;
+                },
+            },
+            [
+                '以ID数量在',
+                <div key="div">
+                    <em key="em">前</em>
+                    <input key="input" />
+                    <strong key="strong">%</strong>
+                </div>,
+                '的值维度参与计算',
             ],
         ],
     ])('转换 ast %j replaceXml %s 为 %s', (ast, replaceXml, result) => {

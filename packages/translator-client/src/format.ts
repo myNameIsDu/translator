@@ -1,9 +1,9 @@
 import { DistinguishedItemType } from '../../common/types';
 
-type ReplaceXmlFuncType = (v: FormattedResult) => JSX.Element | string;
+export type ReplaceXmlFuncType = (v?: FormattedResult) => JSX.Element | string;
 
 export type ReplaceXmlObjType = {
-    [x: string]: ((v: FormattedResult) => JSX.Element | string) | string | undefined;
+    [x: string]: ReplaceXmlFuncType | string;
 };
 
 export type MultipleResult = (string | JSX.Element)[];
@@ -44,13 +44,20 @@ export function format(
         if (element.type === 'normal') {
             result.push(element.text);
         } else if (element.type === 'xml') {
-            const coupleIndex = element.couple;
-            const childrenAst = ast.slice(index + 1, coupleIndex - offset);
             const replaceXmlFunc = replaceXml[element.text]!;
-            result.push(
-                (replaceXmlFunc as ReplaceXmlFuncType)(format(childrenAst, replaceXml, index + 1)),
-            );
-            index = coupleIndex;
+            if ('closedSelf' in element) {
+                result.push((replaceXmlFunc as ReplaceXmlFuncType)());
+            } else {
+                const coupleIndex = element.couple;
+                const realCoupeIndex = coupleIndex - offset;
+                const childrenAst = ast.slice(index + 1, realCoupeIndex);
+                result.push(
+                    (replaceXmlFunc as ReplaceXmlFuncType)(
+                        format(childrenAst, replaceXml, index + 1),
+                    ),
+                );
+                index = realCoupeIndex;
+            }
         } else {
             result.push(element.text);
         }

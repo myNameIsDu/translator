@@ -38,6 +38,11 @@ describe('getHolderAndExtraFromAst 生成 holder 和 extra', () => {
                     couple: 3,
                 },
                 {
+                    type: 'xml',
+                    text: 'input',
+                    closedSelf: true,
+                },
+                {
                     type: 'normal',
                     text: '共计',
                 },
@@ -50,7 +55,7 @@ describe('getHolderAndExtraFromAst 生成 holder 和 extra', () => {
                     text: '页',
                 },
             ],
-            '<span>特殊</span><a>链接</a>共计<holder1>页',
+            '<span>特殊</span><a>链接</a><input/>共计<holder1>页',
             { holder1: 'page' },
         ],
     ])('根据 %j 生成 holder %s 和 extra %s', (ast, holder, extra) => {

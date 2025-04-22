@@ -1,4 +1,3 @@
-import React from 'react';
 import SearchIcon from '@rsuite/icons/Search';
 import {
     Panel,
@@ -12,8 +11,8 @@ import {
     Schema,
 } from 'rsuite';
 import { json, type LoaderFunction } from '@remix-run/node';
-import { useFetcher, useLoaderData, useSearchParams } from '@remix-run/react';
-import { useMemo, useState, useRef } from 'react';
+import { useFetcher, useLoaderData, useSearchParams, useTransition } from '@remix-run/react';
+import React, { useMemo, useState, useRef } from 'react';
 import debounce from 'lodash/debounce';
 import { matchSorter } from 'match-sorter';
 import { readArrayComplete, getAllTextAndId, readObjectComplete, getUnTranslate } from '../helper';
@@ -72,6 +71,7 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 
 export default function Index() {
+    const transition = useTransition();
     const deleteMutation = useFetcher();
     const importMutation = useFetcher();
     const editMutation = useFetcher();
@@ -79,9 +79,14 @@ export default function Index() {
     const [searchParams, setSearchParams] = useSearchParams();
     const type = (searchParams.get('type') || 'complete') as FilterType;
     const [searchWord, setSearchWord] = useState(searchParams.get('word') || '');
-    const [editId, setEditId] = useState<string | null>(null);
     const formRef = useRef<FormInstance>();
-    const [formValue, setFormValue] = useState({});
+    const [formValue, setFormValue] = useState<Record<string, DataType | null>>({});
+    const formValueRef = useRef(formValue);
+    /**
+     * rsuite 的 table 会缓存 children，所以会导致在使用 外部的 state(不是 rowData) 时，会多使用旧值渲染一次，导致浏览器会强制把输入框的光标移到最后
+     * 所以这里使用 ref 来保存最新的 formValue
+     */
+    formValueRef.current = formValue;
 
     const handleTypeChange = (v: string) => {
         handleCancel();
@@ -133,31 +138,40 @@ export default function Index() {
 
     const handleEdit = (rowData: DataType) => {
         const { id } = rowData;
-        setEditId(id);
-        setFormValue(rowData);
+        setFormValue(prev => ({ ...prev, [id]: rowData }));
     };
 
-    const handleCancel = () => {
-        setEditId(null);
+    const handleCancel = (id?: string) => {
         formRef.current?.cleanErrors();
-        setFormValue({});
-    };
-
-    const handleSubmit = (checkStatus: boolean) => {
-        if (checkStatus) {
-            editMutation.submit(formValue, { action: '/edit', method: 'put' });
-            handleCancel();
+        if (id) {
+            setFormValue(prev => ({ ...prev, [id]: null }));
+        } else {
+            setFormValue({});
         }
     };
 
+    const handleSubmit = (id: string) => {
+        if (id) {
+            const rowData = formValue[id];
+            editMutation.submit(rowData, { action: '/edit', method: 'put' });
+            handleCancel(id);
+        }
+    };
+
+    const tableLoading =
+        transition.state === 'loading' ||
+        editMutation.state === 'submitting' ||
+        editMutation.state === 'loading' ||
+        deleteMutation.state === 'submitting' ||
+        deleteMutation.state === 'loading' ||
+        importMutation.state === 'submitting' ||
+        importMutation.state === 'loading';
+
+    const importButtonLoading = importMutation.state === 'submitting';
+
     return (
         <Panel>
-            <Form
-                onSubmit={handleSubmit}
-                formValue={formValue}
-                onChange={value => setFormValue(value)}
-                ref={formRef}
-            >
+            <Form ref={formRef}>
                 <div className="flex mb-[30px]">
                     <SelectPicker
                         value={searchParams.get('type') || 'complete'}
@@ -173,35 +187,25 @@ export default function Index() {
                             <SearchIcon />
                         </InputGroup.Button>
                     </InputGroup>
-                    <Button
-                        onClick={downloadUnTranslate}
-                        appearance="primary"
-                        className="mr-[20px]"
-                    >
-                        导出未翻译文案
-                    </Button>
-                    <Button onClick={handleImport} appearance="primary">
-                        导入翻译
-                    </Button>
+                    <div className="space-x-[10px]">
+                        <Button onClick={downloadUnTranslate} appearance="primary">
+                            导出未翻译文案
+                        </Button>
+                        <Button
+                            onClick={handleImport}
+                            loading={importButtonLoading}
+                            appearance="primary"
+                        >
+                            导入翻译
+                        </Button>
+                    </div>
                 </div>
-                <Table height={800} wordWrap data={loaderData}>
+                <Table height={800} loading={tableLoading} wordWrap data={loaderData}>
                     <Colum align="left" flexGrow={1} width={450}>
                         <HeaderCell>id(当前词条的唯一标识，默认为中文)</HeaderCell>
                         <Cell>
                             {rowData => {
-                                const rowDataId = rowData.id;
-                                if (rowDataId === editId) {
-                                    return (
-                                        <Form.Control
-                                            name="id"
-                                            disabled
-                                            accepter={Textarea}
-                                            defaultValue={rowDataId}
-                                        />
-                                    );
-                                } else {
-                                    return <pre className="m-[0]">{rowDataId}</pre>;
-                                }
+                                return <pre className="m-[0]">{rowData.id}</pre>;
                             }}
                         </Cell>
                     </Colum>
@@ -209,21 +213,8 @@ export default function Index() {
                         <HeaderCell>中文</HeaderCell>
                         <Cell>
                             {rowData => {
-                                const rowDataId = rowData.id;
                                 const rowDataZh = rowData['zh'];
-
-                                if (rowDataId === editId) {
-                                    return (
-                                        <Form.Control
-                                            name="zh"
-                                            disabled
-                                            accepter={Textarea}
-                                            defaultValue={rowDataZh}
-                                        />
-                                    );
-                                } else {
-                                    return <pre className="m-[0]">{rowDataZh}</pre>;
-                                }
+                                return <pre className="m-[0]">{rowDataZh}</pre>;
                             }}
                         </Cell>
                     </Colum>
@@ -233,14 +224,20 @@ export default function Index() {
                             {rowData => {
                                 const rowDataId = rowData.id;
                                 const rowDataEn = rowData['en'];
-
-                                if (rowDataId === editId) {
+                                const rowDataFormValue = formValueRef.current[rowDataId];
+                                if (rowDataFormValue) {
                                     return (
                                         <Form.Control
                                             rule={Schema.Types.StringType().isRequired('请输入')}
                                             name="en"
                                             errorPlacement="rightStart"
-                                            defaultValue={rowDataEn}
+                                            value={rowDataFormValue?.en}
+                                            onChange={value =>
+                                                setFormValue(prev => ({
+                                                    ...prev,
+                                                    [rowDataId]: { ...rowDataFormValue, en: value },
+                                                }))
+                                            }
                                             accepter={Textarea}
                                         />
                                     );
@@ -255,38 +252,44 @@ export default function Index() {
                         <Cell style={{ padding: 6 }}>
                             {rowData => {
                                 const { id } = rowData;
+                                const rowDataFormValue = formValueRef.current[id];
                                 return (
                                     <div>
-                                        {editId === id ? (
+                                        {rowDataFormValue ? (
                                             <>
-                                                <Button size="sm" appearance="link" type="submit">
-                                                    save
+                                                <Button
+                                                    size="sm"
+                                                    appearance="link"
+                                                    onClick={() => handleSubmit(id)}
+                                                >
+                                                    保存
                                                 </Button>
                                                 <Button
                                                     size="sm"
                                                     appearance="link"
-                                                    onClick={handleCancel}
+                                                    onClick={() => handleCancel(id)}
                                                 >
-                                                    cancel
+                                                    取消
                                                 </Button>
                                             </>
                                         ) : (
-                                            <Button
-                                                size="sm"
-                                                disabled={editId !== null}
-                                                appearance="link"
-                                                onClick={() => handleEdit(rowData)}
-                                            >
-                                                edit
-                                            </Button>
+                                            <>
+                                                <Button
+                                                    size="sm"
+                                                    appearance="link"
+                                                    onClick={() => handleEdit(rowData)}
+                                                >
+                                                    编辑
+                                                </Button>
+                                            </>
                                         )}
-                                        {type !== 'unTranslate' && !editId && (
+                                        {type !== 'unTranslate' && !rowDataFormValue && (
                                             <Button
                                                 size="sm"
                                                 onClick={() => handleDelete(id)}
                                                 appearance="link"
                                             >
-                                                delete
+                                                删除
                                             </Button>
                                         )}
                                     </div>

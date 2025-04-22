@@ -4,6 +4,7 @@ const compression = require('compression');
 const morgan = require('morgan');
 const cors = require('cors');
 const { createRequestHandler } = require('@remix-run/express');
+const ip = require('ip');
 
 const BUILD_DIR = path.join(__dirname, 'build');
 
@@ -32,29 +33,29 @@ app.use(morgan('tiny'));
 
 app.all(
     '*',
-    // process.env.NODE_ENV === "development"
-    //   ?
-    // (req, res, next) => {
-    //   purgeRequireCache();
+    process.env.NODE_ENV === 'development'
+        ? (req, res, next) => {
+              purgeRequireCache();
 
-    //   return createRequestHandler({
-    //     build: require(BUILD_DIR),
-    //     mode: process.env.NODE_ENV,
-    //   })(req, res, next);
-    // }
-    // :
-    createRequestHandler({
-        build: require(BUILD_DIR),
-        mode: process.env.NODE_ENV,
-    }),
+              return createRequestHandler({
+                  build: require(BUILD_DIR),
+                  mode: process.env.NODE_ENV,
+              })(req, res, next);
+          }
+        : createRequestHandler({
+              build: require(BUILD_DIR),
+              mode: process.env.NODE_ENV,
+          }),
 );
 const port = process.env.PORT || 7733;
 
-module.exports = () => {
-    app.listen(port, () => {
-        console.log(`Express server listening on port ${port}`);
-    });
-};
+app.listen(port, () => {
+    console.log(`服务已在 ${port} 端口启动
+
+  本地访问: http://localhost:${port}
+  外部访问: http://${ip.address()}:${port}
+  `);
+});
 
 function purgeRequireCache() {
     // purge require cache on requests for "server side HMR" this won't let

@@ -3,7 +3,7 @@ import { type LocalesType, type RecordType } from '../../common/config';
 import { simpleHolderFinder } from '../../common/utils';
 import { getTCalledTextAndId } from './parser-t';
 import fs from 'fs';
-import glob from '../glob.server';
+import { globSync } from '../glob.server';
 import { splitText } from '../../common/split-text';
 import { getHolderAndExtraFromAst } from '../../common/get-holder-and-extra';
 
@@ -25,7 +25,20 @@ export function readArrayComplete() {
 }
 
 export function readAllFiles() {
-    return glob.sync(workDirSrcPath + '/**/*.{js,jsx,ts,tsx}');
+    return globSync(workDirSrcPath + '/**/*.{js,jsx,ts,tsx}', {
+        ignore: {
+            ignored: p => /\.(test|spec)\.(js|jsx|ts|tsx)$/.test(p.name),
+            childrenIgnored: p =>
+                p.isNamed('__tests__') ||
+                p.isNamed('__test__') ||
+                p.isNamed('test') ||
+                p.isNamed('tests') ||
+                p.isNamed('mock') ||
+                p.isNamed('mocks') ||
+                p.isNamed('@types') ||
+                p.isNamed('locales'),
+        },
+    });
 }
 
 export function getAllTextAndId() {

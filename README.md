@@ -7,7 +7,7 @@
 -   支持一个中文多种英文翻译 (特定 id)
 -   支持动态文案
 -   支持 xml 解决多元素语义问题
--   自动收集，并找出过期的翻译 (在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
+-   自动收集，并找出过期的翻译(在业务的迭代中，文案已经删除，但是翻译还存在)，避免语言包越来越大
 -   可视化操作
 
 ## Install
@@ -71,7 +71,7 @@ react 上下文中的翻译方法
 declare function t(s: string, { id }?: { id: string }): string;
 ```
 
-#### 支持动态文案，例如
+支持动态文案，例如
 
 ```tsx
 t(`共计<${var}>`)
@@ -96,6 +96,30 @@ t('共计<span>特殊</span><page>页', {
             {children}
         </span>
     ),
+});
+```
+
+```tsx
+// 支持闭合标签
+t('前<input/>%', {
+    input: () => {
+        return <input key="input" />;
+    },
+});
+```
+
+```tsx
+// 支持标签嵌套
+t('共计<span>特殊<strong>标签</strong><input/></span><page>页', {
+    span: children => (
+        <span key="span" style={{ color: 'red' }}>
+            {children}
+        </span>
+    ),
+    strong: children => <strong key="strong">{children}</strong>,
+    input: () => {
+        return <input key="input" />;
+    },
 });
 ```
 
@@ -165,3 +189,22 @@ function Page() {
     return text;
 }
 ```
+
+## 开发和发布
+
+### 开发
+
+开发流程详见各个包的说明文档
+
+### 发布
+
+-   运行 `pnpm -F "*" build` 打包
+-   开发完成后执行 `pnpm changeset`生成 changeset 文件
+
+    -   选择所有包（本仓库的包全部使用统一版本，即 server 发了一个 patch 版本，即使 client 没有改动，也需要发布一个 patch 版本，用来避免不同版本的匹配问题）
+
+    -   选择需要发布的版本 (major, minor 或者 patch)
+
+    -   填写更改信息
+
+    需要特别注意的是，生成的 changeset 需要和更改放在同一个 commit 内，即在还没有 commit 的时候完成这一步，或者 amend 进去 (执行 `pnpm changeset` 的时候会提示更改的文件，如果更改已经被 commit, 这个时候不会提示有更改无须担心)

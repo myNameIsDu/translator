@@ -31,6 +31,7 @@ export function Translate({
     } else {
         const distinguishText = splitText(text);
         const { holder, extra } = getHolderAndExtraFromAst(distinguishText);
+
         const realId = id || holder;
 
         const translatedText = locales[realId]?.[currentLang] || holder;
