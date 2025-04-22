@@ -7,6 +7,11 @@ export type SplitItemType =
           text: string;
       }
     | {
+          type: 'label';
+          closedSelf: true;
+          text: string;
+      }
+    | {
           type: 'normal';
           text: string;
       };
@@ -26,56 +31,79 @@ const distinguishItems = (v: SplitItemType[], extra?: ExtraType): DistinguishedI
     for (let index = 0; index < v.length; index++) {
         const element = v[index];
         if (element.type === 'label') {
-            if (element.withClosedSign) {
-                const couple = coupleIndexCache.find(v => v.end === index);
-                if (couple) {
-                    distinguishedText.push({
-                        type: 'xml',
-                        text: element.text,
-                        couple: couple.start,
-                        closed: true,
-                    });
-                } else {
-                    // 这里已经判断了是 withClosedSign 所以不可能是 `holder{string}`
-                    // if (extra) {
-                    //   distinguishedText.push({
-                    //     type: element.text as HolderText['type'],
-                    //     text: extra[element.text as keyof ExtraType],
-                    //   });
-                    // } else {
-                    distinguishedText.push({
-                        type: `holder${holderIndex}`,
-                        text: '/' + element.text,
-                    });
-                    holderIndex++;
-                    // }
-                }
-            } else {
-                const closedIndex = v.findIndex(
-                    v => v.type === 'label' && v.withClosedSign && v.text === element.text,
-                );
-                if (closedIndex !== -1) {
-                    distinguishedText.push({
-                        type: 'xml',
-                        text: element.text,
-                        couple: closedIndex,
-                        closed: false,
-                    });
-                    coupleIndexCache.push({ start: index, end: closedIndex });
-                } else {
-                    if (extra) {
+            if ('withClosedSign' in element) {
+                if (element.withClosedSign) {
+                    const couple = coupleIndexCache.find(v => v.end === index);
+                    if (couple) {
                         distinguishedText.push({
-                            type: element.text as HolderText['type'],
-                            text: extra[element.text as keyof ExtraType],
+                            type: 'xml',
+                            // xml 标签内会出现有空格的情况，所以需要去掉
+                            text: element.text.trim(),
+                            couple: couple.start,
+                            closed: true,
                         });
                     } else {
+                        /**
+                         * 这里已经判断了是 withClosedSign(即是以 / 开头) 所以不可能是 `holder{string}` 类型
+                         */
+                        // if (extra) {
+                        //   distinguishedText.push({
+                        //     type: element.text as HolderText['type'],
+                        //     text: extra[element.text as keyof ExtraType],
+                        //   });
+                        // } else {
                         distinguishedText.push({
                             type: `holder${holderIndex}`,
-                            text: element.text,
+                            /**
+                             * 由于没有找到对应的 couple (起始标签)，所以这个节点的类型为 holder, 这里的 text 需要加上 /
+                             * 因为上一步在做解析的时候判断是标签，并且带有 / 开头，所以标记 withClosedSign 为 true，并且去掉了 / 作为文案
+                             */
+                            text: '/' + element.text,
                         });
                         holderIndex++;
+                        // }
+                    }
+                } else {
+                    const closedIndex = v.findIndex(
+                        v =>
+                            v.type === 'label' &&
+                            'withClosedSign' in v &&
+                            v.withClosedSign &&
+                            // xml 标签内会出现有空格的情况，所以需要去掉
+                            v.text.trim() === element.text.trim(),
+                    );
+                    if (closedIndex !== -1) {
+                        distinguishedText.push({
+                            type: 'xml',
+                            // xml 标签内会出现有空格的情况，所以需要去掉
+                            text: element.text.trim(),
+                            couple: closedIndex,
+                            closed: false,
+                        });
+                        coupleIndexCache.push({ start: index, end: closedIndex });
+                    } else {
+                        if (extra) {
+                            distinguishedText.push({
+                                type: element.text as HolderText['type'],
+                                text: extra[element.text as keyof ExtraType],
+                            });
+                        } else {
+                            distinguishedText.push({
+                                type: `holder${holderIndex}`,
+                                text: element.text,
+                            });
+                            holderIndex++;
+                        }
                     }
                 }
+            } else {
+                // 自闭合 xml 标签
+                distinguishedText.push({
+                    type: 'xml',
+                    // xml 标签内会出现有空格的情况，所以需要去掉
+                    text: element.text.trim(),
+                    closedSelf: true,
+                });
             }
         } else {
             distinguishedText.push(element);
@@ -88,13 +116,14 @@ const distinguishItems = (v: SplitItemType[], extra?: ExtraType): DistinguishedI
  *
  * @param v 要翻译的文案
  * @returns 根据 < > 分割的字符
- * @example <a>xx</a>bbb<c>  =>
+ * @example <a>xx</a>bbb<c><d/>   =>
  * [
  *   { type: 'label', withClosedSign: false, text: 'a' },
  *   { type: 'normal', text: 'xx' },
  *   { type: 'label', withClosedSign: true, text: 'a' },
  *   { type: 'normal', text: 'bbb' },
  *   { type: 'label', withClosedSign: false, text: 'c' }
+ *   { type: 'label', 'd', closedSelf: true }
  *  ]
  */
 export const simpleSplitWithSign = (v: string): SplitItemType[] => {
@@ -104,11 +133,11 @@ export const simpleSplitWithSign = (v: string): SplitItemType[] => {
     let signStartIndex: null | number = null;
     while (v[point]) {
         const currentCharacter = v[point];
-        const isLastCharacterEscape = v[point - 1];
-        if (currentCharacter === '<' && isLastCharacterEscape !== '/') {
+        const lastCharter = v[point - 1];
+        if (currentCharacter === '<' && lastCharter !== '/') {
             signStartIndex = point;
         }
-        if (currentCharacter === '>' && isLastCharacterEscape !== '/') {
+        if (currentCharacter === '>') {
             if (signStartIndex !== null) {
                 const sign = v.slice(signStartIndex + 1, point);
                 const normalCharacter = v.slice(startIndex, signStartIndex);
@@ -117,12 +146,22 @@ export const simpleSplitWithSign = (v: string): SplitItemType[] => {
                         type: 'normal',
                         text: normalCharacter,
                     });
-                const signWithClosed = sign.startsWith('/');
-                splitText.push({
-                    type: 'label',
-                    withClosedSign: signWithClosed,
-                    text: signWithClosed ? sign.slice(1) : sign,
-                });
+
+                if (lastCharter !== '/') {
+                    const signWithClosed = sign.startsWith('/');
+                    splitText.push({
+                        type: 'label',
+                        withClosedSign: signWithClosed,
+                        text: signWithClosed ? sign.slice(1) : sign,
+                    });
+                } else {
+                    splitText.push({
+                        type: 'label',
+                        text: sign.slice(0, sign.length - 1),
+                        closedSelf: true,
+                    });
+                }
+
                 startIndex = point + 1;
                 signStartIndex = null;
             }

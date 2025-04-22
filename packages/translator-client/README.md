@@ -30,6 +30,54 @@ t(`文案/<文案/>`);
 
 在渲染时转义符会被自动去除
 
+#### xml
+
+```tsx
+t('共计<span>特殊</span><page>页', {
+    span: children => (
+        <span key="span" style={{ color: 'red' }}>
+            {children}
+        </span>
+    ),
+});
+```
+
+```tsx
+// 支持闭合标签
+t('前<input/>%', {
+    input: () => {
+        return <input key="input" />;
+    },
+});
+```
+
+```tsx
+// 支持标签嵌套
+t('共计<span>特殊<strong>标签</strong><input/></span><page>页', {
+    span: children => (
+        <span key="span" style={{ color: 'red' }}>
+            {children}
+        </span>
+    ),
+    strong: children => <strong key="strong">{children}</strong>,
+    input: () => {
+        return <input key="input" />;
+    },
+});
+```
+
+当 xml 替换函数返回 字符串时，t 函数也会尽量返回字符串
+
+```tsx
+expect(
+    t('共计<span>特殊</span><page>页', {
+        span: c => `<span style='color:red'>${c}</span>`,
+    }),
+).toBe("共计<span style='color:red'>特殊</span>page页");
+```
+
+更多用例[请查看](./packages/translator-client/src/__test__/translate.test.tsx)
+
 ### Translate
 
 react 上下文外 (常量声明) 的翻译组件
@@ -43,7 +91,7 @@ declare function Translate({ text, id }: TranslatePropsType): JSX.Element;
 切换语言的方法
 
 ```tsx
-type SupportLanguagesType = 'zh-CN' | 'en-US';
+type SupportLanguagesType = 'zh' | 'en';
 
 declare const setLang: (lang: SupportLanguagesType) => void;
 ```
@@ -84,3 +132,8 @@ function Page() {
     return text;
 }
 ```
+
+## 开发
+
+-   使用 `pnpm link` 到全局，然后在项目中 link 下来
+-   运行 `pnpm run build:watch`

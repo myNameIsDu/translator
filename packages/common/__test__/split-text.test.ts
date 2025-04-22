@@ -71,7 +71,16 @@ describe('splitText 分割字符', () => {
                 [
                     {
                         type: 'normal',
-                        text: '共计<page/>页',
+                        text: '共计',
+                    },
+                    {
+                        type: 'xml',
+                        text: 'page',
+                        closedSelf: true,
+                    },
+                    {
+                        type: 'normal',
+                        text: '页',
                     },
                 ],
             ],
@@ -199,6 +208,84 @@ describe('splitText 分割字符', () => {
                     },
                     {
                         type: 'holder2',
+                        text: 'page',
+                    },
+                    {
+                        type: 'normal',
+                        text: '页',
+                    },
+                ],
+            ],
+            [
+                '<span>特殊</span><input/>共计<page>页',
+                [
+                    {
+                        type: 'xml',
+                        closed: false,
+                        text: 'span',
+                        couple: 2,
+                    },
+                    {
+                        type: 'normal',
+                        text: '特殊',
+                    },
+                    {
+                        type: 'xml',
+                        closed: true,
+                        text: 'span',
+                        couple: 0,
+                    },
+                    {
+                        type: 'xml',
+                        text: 'input',
+                        closedSelf: true,
+                    },
+                    {
+                        type: 'normal',
+                        text: '共计',
+                    },
+                    {
+                        type: 'holder1',
+                        text: 'page',
+                    },
+                    {
+                        type: 'normal',
+                        text: '页',
+                    },
+                ],
+            ],
+
+            [
+                // 有空格的 xml 标签会自动去除空格
+                '<span >特殊</span><input />共计<page>页',
+                [
+                    {
+                        type: 'xml',
+                        closed: false,
+                        text: 'span',
+                        couple: 2,
+                    },
+                    {
+                        type: 'normal',
+                        text: '特殊',
+                    },
+                    {
+                        type: 'xml',
+                        closed: true,
+                        text: 'span',
+                        couple: 0,
+                    },
+                    {
+                        type: 'xml',
+                        text: 'input',
+                        closedSelf: true,
+                    },
+                    {
+                        type: 'normal',
+                        text: '共计',
+                    },
+                    {
+                        type: 'holder1',
                         text: 'page',
                     },
                     {

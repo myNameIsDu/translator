@@ -84,6 +84,16 @@ describe('t 函数', () => {
             ]);
         });
 
+        it('当存在自闭合 xml 时，替换函数返回的内容', () => {
+            expect(
+                t('前<input/>%', {
+                    input: () => {
+                        return <input key="input" />;
+                    },
+                }),
+            ).toEqual(['前', <input key="input" />, '%']);
+        });
+
         it('当存在 多个 xml 时，替换函数返回的内容', () => {
             expect(
                 t('共计<span>特殊</span><strong>标签</strong><page>页', {
@@ -106,29 +116,77 @@ describe('t 函数', () => {
 
         it('当存在 嵌套 xml 时，替换函数返回的内容', () => {
             expect(
-                t('共计<span>特殊<strong>标签</strong></span><page>页', {
+                t('共计<span>特殊<strong>标签</strong><input/></span><page>页', {
                     span: children => (
                         <span key="span" style={{ color: 'red' }}>
                             {children}
                         </span>
                     ),
                     strong: children => <strong key="strong">{children}</strong>,
+                    input: () => {
+                        return <input key="input" />;
+                    },
                 }),
             ).toEqual([
                 '共计',
                 <span key="span" style={{ color: 'red' }}>
                     特殊<strong key="strong">标签</strong>
+                    <input key="input" />
                 </span>,
                 'page页',
             ]);
         });
 
-        it('当存在  xml 时，替换函数返回为纯字符串时，返回字符串', () => {
+        it('当存在 嵌套多个 xml 时，替换函数返回的内容', () => {
+            expect(
+                t('共计<span><i>特殊</i><strong>标签</strong></span><page>页', {
+                    span: children => (
+                        <span key="span" style={{ color: 'red' }}>
+                            {children}
+                        </span>
+                    ),
+                    strong: children => <strong key="strong">{children}</strong>,
+                    i: children => <i key="i">{children}</i>,
+                }),
+            ).toEqual([
+                '共计',
+                <span key="span" style={{ color: 'red' }}>
+                    <i key="i">特殊</i>
+                    <strong key="strong">标签</strong>
+                </span>,
+                'page页',
+            ]);
+        });
+
+        it('当存在 xml 时，替换函数返回为纯字符串时，返回字符串', () => {
             expect(
                 t('共计<span>特殊</span><page>页', {
                     span: c => `<span style='color:red'>${c}</span>`,
                 }),
             ).toBe("共计<span style='color:red'>特殊</span>page页");
+        });
+
+        it('当 xml 中存在空格时，会被自动去除', () => {
+            expect(
+                t('共计<span >特殊<strong >标签</strong><input /></span><page>页', {
+                    span: children => (
+                        <span key="span" style={{ color: 'red' }}>
+                            {children}
+                        </span>
+                    ),
+                    strong: children => <strong key="strong">{children}</strong>,
+                    input: () => {
+                        return <input key="input" />;
+                    },
+                }),
+            ).toEqual([
+                '共计',
+                <span key="span" style={{ color: 'red' }}>
+                    特殊<strong key="strong">标签</strong>
+                    <input key="input" />
+                </span>,
+                'page页',
+            ]);
         });
     });
 });

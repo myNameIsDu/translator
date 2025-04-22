@@ -15,20 +15,20 @@ pnpm translator
 
 ## 开发
 
-1. 当前包 link 到全局
+1. 执行 `watch`
+
+```
+p dev-cli
+```
+
+2. 当前包 link 到全局
 
 ```shell
-p -F "*-server"  link --global
+p  link --global
 ```
 
-2. 执行 `watch`
-
-```
-p -F "*-server"  dev-cli
-```
-
-3. 在需要有国家化需求的项目内执行
+3. 在需要有国际化需求的项目内执行
 
 ```shell
-translator
+translator dev
 ```

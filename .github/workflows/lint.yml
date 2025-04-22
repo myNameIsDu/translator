@@ -17,12 +17,12 @@ jobs:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@v2.0.1
         with:
-          version: 7.x
+          version: 9.15.5
 
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 20.19.0
 
       - name: install dep
         run: pnpm i
