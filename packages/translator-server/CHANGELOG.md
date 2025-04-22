@@ -1,5 +1,11 @@
 # translator-server
 
+## 0.4.0
+
+### Minor Changes
+
+-   e2dad86: 同步最新修改
+
 ## 0.3.0
 
 ### Minor Changes
