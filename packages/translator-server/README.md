@@ -18,13 +18,13 @@ pnpm translator
 1. 执行 `watch`
 
 ```
-p dev-cli
+pnpm dev-cli
 ```
 
 2. 当前包 link 到全局
 
 ```shell
-p  link --global
+pnpm  link --global
 ```
 
 3. 在需要有国际化需求的项目内执行

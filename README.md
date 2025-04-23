@@ -190,6 +190,33 @@ function Page() {
 }
 ```
 
+## Translate 组件和 t 函数的本质区别
+
+区分 `Translate` 和 `t` 函数使用主要是目的是区分不同的执行时机，`t('')`会被直接调用，而 `Translate` 组件会被编译成一个函数，在渲染时调用。
+
+原因是因为 `t` 函数的调用是直接调用，如果有以下导入结构和代码
+
+```js
+// constants.js
+export const constant = [
+    label: t('xxx'),
+    value: 'xxx'
+]
+```
+
+```js
+// index.js
+import { constant } from './constants.js';
+import { setLocales } from 'translator-client';
+import locales from '@/locales/complete.json';
+
+setLocales(locales);
+```
+
+首先导入了 `constants.js` 所以在执行 `t('xxx')` 的时候 `setLocales(locales)` 还没有执行，因此 `t` 函数此时还没有拿到翻译相关数据。
+
+当然，实际项目中会很复杂，可能出现直接在常量中使用 `t` 函数会生效的情况，例如你使用了懒加载，但是还是建议按照约定，明确区分 `t` 和 `Translate` 的使用场景，即在组件内和函数内使用 `t`, 在常量中使用 `Translate`。
+
 ## 开发和发布
 
 ### 开发
