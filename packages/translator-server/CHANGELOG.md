@@ -1,5 +1,11 @@
 # translator-server
 
+## 0.5.0
+
+### Minor Changes
+
+-   77fc4e7: client 兼容 ssr 场景
+
 ## 0.4.1
 
 ### Patch Changes
