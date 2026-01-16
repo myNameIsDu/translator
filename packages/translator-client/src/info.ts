@@ -8,15 +8,27 @@ import { type SupportLanguagesType, supportLanguages } from '../../common/config
 
 export let locales: LocalesType = {};
 
-export let lang = ((): SupportLanguagesType => {
+export let lang: SupportLanguagesType = 'en';
+
+if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
     const storageLang = localStorage.getItem('lang');
     if (storageLang && supportLanguages.includes(storageLang as any)) {
-        return storageLang as SupportLanguagesType;
+        lang = storageLang as SupportLanguagesType;
+    } else {
+        const willSetLang: SupportLanguagesType =
+            typeof navigator !== 'undefined' &&
+            navigator.language &&
+            navigator.language.includes('zh')
+                ? 'zh'
+                : 'en';
+        try {
+            localStorage.setItem('lang', willSetLang);
+        } catch (e) {
+            // ignore localStorage write errors (e.g., quota)
+        }
+        lang = willSetLang;
     }
-    const willSetLang: SupportLanguagesType = navigator.language.includes('zh') ? 'zh' : 'en';
-    localStorage.setItem('lang', willSetLang);
-    return willSetLang;
-})();
+}
 
 export const setLocales = (nextLocales: LocalesType) => {
     locales = nextLocales;
@@ -31,6 +43,12 @@ export const getLang = () => {
 };
 
 export const setLang = (nextLang: SupportLanguagesType) => {
-    localStorage.setItem('lang', nextLang);
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+        try {
+            localStorage.setItem('lang', nextLang);
+        } catch (e) {
+            // ignore localStorage write errors
+        }
+    }
     lang = nextLang;
 };
